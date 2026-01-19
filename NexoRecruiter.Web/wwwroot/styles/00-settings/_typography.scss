@@ -1,0 +1,35 @@
+// ==========================================================================
+// Settings: Typography
+// ==========================================================================
+// Define la tipografía y tamaños de fuente
+
+// Familias de fuente
+$font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-heading: $font-family-base;
+$font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+// Tamaños de fuente
+$font-size-base: 16px;
+$font-size-sm: 14px;
+$font-size-xs: 12px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+
+// Headings
+$font-size-h1: 2.5rem;   // 40px
+$font-size-h2: 2rem;     // 32px
+$font-size-h3: 1.75rem;  // 28px
+$font-size-h4: 1.5rem;   // 24px
+$font-size-h5: 1.25rem;  // 20px
+$font-size-h6: 1rem;     // 16px
+
+// Pesos de fuente
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Altura de línea
+$line-height-base: 1.5;
+$line-height-heading: 1.2;

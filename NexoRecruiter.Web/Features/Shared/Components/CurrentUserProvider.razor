@@ -1,0 +1,67 @@
+@using Microsoft.AspNetCore.Identity
+@using NexoRecruiter.Web.Features.Auth.Models
+
+@inject AuthenticationStateProvider _authStateProvider
+@inject UserManager<ApplicationUser> _userManager
+@implements IDisposable
+
+<CascadingValue Value="_currentUser" Name="CurrentUser">
+    <CascadingValue Value="_currentRoles" Name="CurrentRoles">
+        @ChildContent
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    public ApplicationUser? _currentUser { get; set; }
+    public string? _currentRoles { get; set; }
+
+    private readonly SemaphoreSlim _refreshLock = new(1, 1);
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+        await RefreshUserAsync();
+    }
+
+    private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        await RefreshUserAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RefreshUserAsync()
+    {
+        await _refreshLock.WaitAsync();
+        try
+        {
+            var authState = await _authStateProvider.GetAuthenticationStateAsync();
+            _currentUser = await _userManager.GetUserAsync(authState.User);
+            await GetUserRoleAsync();
+        }
+        finally
+        {
+            _refreshLock.Release();
+        }
+    }
+
+    private async Task GetUserRoleAsync()
+    {
+        if (_currentUser is null)
+        {
+            _currentRoles = string.Empty;
+            return;
+        }
+
+        var roles = await _userManager.GetRolesAsync(_currentUser);
+        _currentRoles = roles is null ? string.Empty : string.Join(",", roles);
+    }
+
+    public void Dispose()
+    {
+        _authStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+        _refreshLock.Dispose();
+    }
+}

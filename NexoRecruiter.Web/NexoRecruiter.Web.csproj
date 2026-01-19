@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\NexoRecruiter.Domain\NexoRecruiter.Domain.csproj" />
+    <ProjectReference Include="..\NexoRecruiter.Infrastructure\NexoRecruiter.Infrastructure.csproj" />
+    <ProjectReference Include="..\NexoRecruiter.Application\NexoRecruiter.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DartSassBuilder" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
+    <PackageReference Include="MudBlazor" Version="8.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- DartSassBuilder compilará estos archivos automáticamente -->
+    <None Remove="wwwroot\styles\**\*.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- dotnet watch monitoreará cambios en SCSS -->
+    <Watch Include="wwwroot\styles\**\*.scss" />
+  </ItemGroup>
+
+  <!-- 1. Excluir archivos TS del output -->
+  <ItemGroup>
+    <None Remove="wwwroot\scripts\src\**\*.ts" />
+    <None Remove="wwwroot\scripts\src\**\*.js" />
+  </ItemGroup>
+
+  <!-- 2. dotnet watch monitorea cambios en TS -->
+  <ItemGroup>
+    <Watch Include="wwwroot\scripts\src\**\*.ts" />
+  </ItemGroup>
+
+  <!-- Excluir archivos source del publish -->
+  <ItemGroup>
+    <Content Remove="wwwroot\scripts\src\**\*" />
+    <Content Remove="wwwroot\styles\**\*.scss" />
+    <Content Remove="node_modules\**\*" />
+    <Content Remove="package.json" />
+    <Content Remove="pnpm-lock.yaml" />
+    <Content Remove="tsconfig.json" />
+    <Content Remove="vite.config.js" />
+  </ItemGroup>
+
+  <!-- Instalar node_modules si no existen -->
+  <Target Name="RestoreNodeModules" BeforeTargets="BeforeBuild">
+    <Exec Command="pnpm install"
+      WorkingDirectory="$(ProjectDir)"
+      Condition="!Exists('$(ProjectDir)node_modules') And Exists('$(ProjectDir)package.json')" />
+  </Target>
+
+  <!-- Build TypeScript solo en Release -->
+  <Target Name="BuildTypeScript" BeforeTargets="Build">
+    <Exec Command="pnpm run build"
+      WorkingDirectory="$(ProjectDir)"
+      Condition="'$(Configuration)' == 'Release' And Exists('$(ProjectDir)package.json')" />
+  </Target>
+
+  <!-- Limpiar archivos generados -->
+  <Target Name="CleanTypeScript" AfterTargets="Clean">
+    <RemoveDir Directories="$(ProjectDir)wwwroot\scripts\dist"
+      Condition="Exists('$(ProjectDir)wwwroot\scripts\dist')" />
+  </Target>
+
+  <!-- Validar que los bundles existen antes de publish -->
+  <Target Name="ValidateAssets" BeforeTargets="Publish" Condition="'$(Configuration)' == 'Release'">
+    <Error Text="Bundle JS no encontrado. Ejecuta 'pnpm run build'" 
+           Condition="!Exists('$(ProjectDir)wwwroot\scripts\dist\app.bundle.js')" />
+    <Error Text="CSS compilado no encontrado" 
+           Condition="!Exists('$(ProjectDir)wwwroot\styles\main.css')" />
+  </Target>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

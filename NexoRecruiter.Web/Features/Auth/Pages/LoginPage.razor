@@ -1,0 +1,163 @@
+@page "/login"
+@attribute [AllowAnonymous]
+
+@using NexoRecruiter.Application.Auth.DTOs
+@inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject IJSRuntime JSRuntime
+@layout AuthLayout
+
+@{
+    string imageBG = $"{Assets["images/login-lateral.svg"]}";
+}
+
+<MudGrid Class="login-page-container" Spacing="0">
+    <MudItem xs="12" lg="6" Class="login-page__left-side">
+        <MudCard Elevation="0" class="login-card">
+            <MudText Typo="Typo.h5" Class="login__title mb-10">Iniciar Ahora</MudText>
+
+            <form id="loginForm" method="post" action="/auth/login" class="d-flex flex-column gap-5"
+                  @onsubmit="ValidateBeforeSubmit" @onsubmit:preventDefault="true">
+                <AntiforgeryToken />
+
+                <div>
+                    <MudText Class="login-card__label">Correo</MudText>
+                    <MudTextField @bind-Value="_email" 
+                                  Label="Email" 
+                                  Variant="Variant.Filled"
+                                  InputType="InputType.Email" 
+                                  id="emailField"
+                                  Error="@_emailError"
+                                  ErrorText="@_emailErrorText" />
+                    <input type="hidden" name="email" value="@_email" />
+                </div>
+
+                <div>
+                    <MudText Class="login-card__label">Contraseña</MudText>
+                    <MudTextField @bind-Value="_password" 
+                                  Label="Password" 
+                                  Variant="Variant.Filled"
+                                  InputType="@(ShowPassword? InputType.Text: InputType.Password)" 
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.RemoveRedEye" 
+                                  AdornmentColor="Color.Primary"
+                                  OnAdornmentClick="ShowPasswordField" 
+                                  id="passwordField"
+                                  Error="@_passwordError"
+                                  ErrorText="@_passwordErrorText" />
+                    <input type="hidden" name="password" value="@_password" />
+                </div>
+
+                <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+                <MudButton Class="btn-signup" Variant="Variant.Filled" Color="Color.Primary"
+                           ButtonType="ButtonType.Submit">
+                    Inicia Sesión
+                </MudButton>
+
+                @if (!string.IsNullOrEmpty(_errorMessage))
+                {
+                    <MudAlert Variant="Variant.Filled" Severity="Severity.Error">@_errorMessage</MudAlert>
+                }
+            </form>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" lg='6' Class="login-page__right-side d-none d-lg-block">
+        <div class="login-page__background-image d-none d-lg-block" style="background-image: url(@imageBG)">
+        </div>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool ShowPassword = false;
+    private string _email = string.Empty;
+    private string _password = string.Empty;
+    private string _errorMessage = string.Empty;
+    
+    // Estados de error para MudTextField
+    private bool _emailError = false;
+    private string _emailErrorText = string.Empty;
+    private bool _passwordError = false;
+    private string _passwordErrorText = string.Empty;
+
+    [SupplyParameterFromQuery]
+    [Parameter]
+    public string ReturnUrl { get; set; } = "/dashboard";
+
+    [SupplyParameterFromQuery]
+    public string? Error { get; set; }
+
+    private void ShowPasswordField()
+    {
+        ShowPassword = !ShowPassword;
+    }
+
+    private void ValidateBeforeSubmit()
+    {
+        // Limpiar errores previos
+        _errorMessage = string.Empty;
+        _emailError = false;
+        _emailErrorText = string.Empty;
+        _passwordError = false;
+        _passwordErrorText = string.Empty;
+
+        bool isValid = true;
+
+        // Validar email
+        if (string.IsNullOrWhiteSpace(_email))
+        {
+            _emailError = true;
+            _emailErrorText = "El correo es requerido";
+            isValid = false;
+        }
+        else if (!_email.Contains("@"))
+        {
+            _emailError = true;
+            _emailErrorText = "El correo no es válido";
+            isValid = false;
+        }
+
+        // Validar password
+        if (string.IsNullOrWhiteSpace(_password))
+        {
+            _passwordError = true;
+            _passwordErrorText = "La contraseña es requerida";
+            isValid = false;
+        }
+
+        // Si todo válido, submit el form
+        if (isValid)
+        {
+            SubmitForm();
+        }
+    }
+
+    private async void SubmitForm()
+    {
+        // Submit nativo del formulario HTML
+        await Task.CompletedTask;
+        var form = await JSRuntime.InvokeAsync<IJSObjectReference>("eval", "document.getElementById('loginForm')");
+        await form.InvokeVoidAsync("submit");
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Error == "1" || Error == "2")
+        {
+            _errorMessage = "Credenciales inválidas";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity?.IsAuthenticated == true)
+            {
+                _navigationManager.NavigateTo("/dashboard", replace: true);
+            }
+        }
+    }
+}

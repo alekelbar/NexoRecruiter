@@ -1,0 +1,27 @@
+// ==========================================================================
+// Settings: Spacing
+// ==========================================================================
+// Define el sistema de espaciado del proyecto
+
+// Unidad base de espaciado
+$spacing-unit: 8px;
+
+// Escala de espaciado
+$spacing-xs: $spacing-unit * 0.5;  // 4px
+$spacing-sm: $spacing-unit;        // 8px
+$spacing-md: $spacing-unit * 2;    // 16px
+$spacing-lg: $spacing-unit * 3;    // 24px
+$spacing-xl: $spacing-unit * 4;    // 32px
+$spacing-2xl: $spacing-unit * 6;   // 48px
+$spacing-3xl: $spacing-unit * 8;   // 64px
+
+// Mapa para generación automática de utilities
+$spacing-map: (
+  0: 0,
+  1: $spacing-sm,
+  2: $spacing-md,
+  3: $spacing-lg,
+  4: $spacing-xl,
+  5: $spacing-2xl,
+  6: $spacing-3xl,
+);

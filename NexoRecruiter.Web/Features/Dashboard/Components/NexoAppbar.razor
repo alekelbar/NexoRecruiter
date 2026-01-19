@@ -1,0 +1,35 @@
+<MudAppBar Color="Color.Primary" Fixed Elevation="1">
+    <MudIcon Icon="@Icons.Material.Rounded.PeopleAlt" Size="Size.Large" Class="mr-4"></MudIcon>
+    <MudText>Your Company Name</MudText>
+    <MudSpacer />
+
+    <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" AriaLabel="Open user menu">
+        <MudStack Class="px-4 py-4" Row Spacing="8" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+            <MudAvatar Color="Color.Secondary">
+                A
+            </MudAvatar>
+            <MudStack>
+                <MudText>@(CurrentUser is not null ? CurrentUser.UserName : string.Empty)</MudText>
+                <MudText Typo="Typo.caption">@(CurrentRoles)</MudText>
+            </MudStack>
+        </MudStack>
+        <MudDivider></MudDivider>
+        <MudMenuItem>
+            <form method="post" action="/auth/logout">
+                <AntiforgeryToken />
+                <input type="hidden" name="returnUrl" value="/login" />
+                <MudButton Class="dashboard-btn" ButtonType="ButtonType.Submit" Variant="Variant.Text"
+                    Color="Color.Inherit">
+                    Cerrar sesión
+                </MudButton>
+            </form>
+        </MudMenuItem>
+    </MudMenu>
+</MudAppBar>
+
+@code {
+    [CascadingParameter(Name = "CurrentUser")]
+    public ApplicationUser? CurrentUser { get; set; }
+    [CascadingParameter(Name = "CurrentRoles")]
+    public string? CurrentRoles { get; set; }
+}

@@ -1,0 +1,76 @@
+<MudDrawer Open="IsOpen" Anchor="Anchor.Start" Elevation="1" Variant="@DrawerVariant.Persistent">
+    <MudDrawerHeader Class="dashboard-sidebar__header">
+        <MudStack StretchItems="StretchItems.None">
+            <MudImage Class="dashboard-sidebar__logo" Src="@Assets[key: "images/nexo-logo.png"]"></MudImage>
+            <MudDivider />
+        </MudStack>
+    </MudDrawerHeader>
+    <MudText Typo="Typo.h6" Class="ml-4 my-3">General</MudText>
+    <MudNavMenu>
+
+        <MudText Typo="Typo.caption" Class="px-4 pt-3 pb-2">General</MudText>
+
+        <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
+            Dashboard
+        </MudNavLink>
+
+        <MudNavLink Href="/account" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountCircle">
+            Perfil
+        </MudNavLink>
+
+        <MudDivider Class="my-2" />
+
+        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Reclutamiento</MudText>
+
+        <MudNavLink Href="/jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WorkOutline">
+            Vacantes
+        </MudNavLink>
+
+        <MudNavLink Href="/applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AssignmentInd">
+            Aplicaciones
+        </MudNavLink>
+
+        <MudNavLink Href="/candidates" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">
+            Candidatos
+        </MudNavLink>
+
+        <MudDivider Class="my-2" />
+
+        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">IA</MudText>
+
+        <MudNavLink Href="/ai-evaluations" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Psychology">
+            Evaluaciones IA
+        </MudNavLink>
+
+        <MudDivider Class="my-2" />
+
+        @if (CurrentRoles?.Contains("Admin") == true)
+        {
+            <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Administración</MudText>
+
+            <MudNavLink Href="/admin/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">
+                Usuarios
+            </MudNavLink>
+
+            <MudNavLink Href="/admin/settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
+                Configuración
+            </MudNavLink>
+
+            <MudDivider Class="my-2" />
+        }
+
+        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Público</MudText>
+
+        <MudNavLink Href="/careers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">
+            Portal de empleo
+        </MudNavLink>
+
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    [CascadingParameter(Name = "CurrentRoles")]
+    public string? CurrentRoles { get; set; }
+    [Parameter]
+    public bool IsOpen { get; set; }
+}

@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Components
+@using NexoRecruiter.Web.Features.Dashboard.Components
+@using NexoRecruiter.Web.Features.Dashboard.Helpers
+@using NexoRecruiter.Web.Features.Shared.Components
+@using System.Reflection.Metadata
+
+@implements ILayoutHeadHost
+@inherits LayoutComponentBase
+
+<CascadingValue Value="this" IsFixed>
+    <HeadContent>
+        @pageHead
+    </HeadContent>
+        <AppShell>
+            <MudLayout Class="dashboard">
+                <NexoAppbar />
+                <NexoDrawer IsOpen="_drawerController.IsOpen" />
+                <CascadingValue Value="_drawerController">
+                    <MudMainContent>
+                        <MudStack Row>
+                            <MudIconButton OnClick="_drawerController.Toggle"
+                                Icon="@(_drawerController.IsOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
+                                aria-label="Open Drawer" />
+                            <MudBreadcrumbs Items="_breadcrumbItems" />
+                        </MudStack>
+                        @Body
+                    </MudMainContent>
+                </CascadingValue>
+            </MudLayout>
+        </AppShell>
+</CascadingValue>
+
+@code {
+    private List<BreadcrumbItem> _breadcrumbItems = new() {
+        new("Home", "/dashboard"),
+        new("dashboard", "/dashboard"),
+    };
+
+    private RenderFragment? pageHead;
+    public DrawerController _drawerController = new();
+
+    public void SetPageHead(RenderFragment? fragment)
+    {
+        pageHead = fragment;
+        StateHasChanged();
+    }
+
+    public void ClearPageHead()
+    {
+        pageHead = null;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        _drawerController.OnChange += () => InvokeAsync(StateHasChanged);
+    }
+}

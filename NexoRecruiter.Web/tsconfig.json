@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    
+    /* Emit */
+    "noEmit": true, // Vite compila, TypeScript solo valida
+    "sourceMap": false,
+    
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    /* Type Checking */
+    "strict": false, // Empezamos permisivo, activa gradualmente
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "skipLibCheck": true,
+    
+    /* Advanced */
+    "allowImportingTsExtensions": true,
+    "allowJs": true, // Permite .js durante migración si necesario
+    "checkJs": false
+  },
+  "include": [
+    "wwwroot/scripts/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot/scripts/dist"
+  ]
+}

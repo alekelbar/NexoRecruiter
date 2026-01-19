@@ -1,0 +1,78 @@
+@page "/Account"
+@using NexoRecruiter.Web.Features.Auth.Models
+@using NexoRecruiter.Web.Features.Dashboard.Layouts
+@attribute [Authorize]
+@layout DashboardLayout
+
+<LayoutHead>
+    <link href="@(Assets["styles/Features/Account/Pages/AccountPage.css"])" rel="stylesheet" />
+</LayoutHead>
+
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard Class="pa-4">
+                <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                    <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
+                        <MudStack Justify="Justify.SpaceBetween">
+                            <MudText Typo="Typo.h6">@(CurrentUser?.FullName?? "")</MudText>
+                        </MudStack>
+                    </MudStack>
+                    <MudButton Color="@Color.Primary" Variant="Variant.Filled">
+                        Edit <MudIcon Class="ml-8" Icon="@Icons.Material.Filled.Edit" Style="color: white;"></MudIcon>
+                    </MudButton>
+                </MudStack>
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.subtitle2" Class="mt-4">Nombre completo</MudText>
+                        <MudTextField T="string" Placeholder="Nombre completo" Variant="Variant.Filled"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.subtitle2" Class="mt-4">Puesto de Trabajo</MudText>
+                        <MudTextField T="string" Placeholder="Puesto" Variant="Variant.Filled"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.subtitle2" Class="mt-4">Fecha de creación</MudText>
+                        <MudTextField T="string" Placeholder="Fecha de creación" Variant="Variant.Filled">
+                        </MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.subtitle2" Class="mt-4">Último acceso</MudText>
+                        <MudTextField T="string" Placeholder="Último acceso" Variant="Variant.Filled"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.subtitle1" Class="mb-4">My Email Address</MudText>
+                        <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center" Spacing="2">
+                            <MudChip Class="rounded-circle" Color="Color.Primary" Variant="Variant.Filled" T="Icons">
+                                <MudIcon Icon="@Icons.Material.Filled.Email" Style="color: white;"></MudIcon>
+                            </MudChip>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@(CurrentUser?.Email ?? "")</MudText>
+                                <MudText Typo="Typo.caption">Last login one month ago</MudText>
+                            </MudStack>
+                        </MudStack>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudStack Row>
+                            <MudChip Variant="Variant.Filled" Color="Color.Primary" T="string">Verified</MudChip>
+                            <MudChip Color="Color.Success" T="string">Active</MudChip>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [CascadingParameter(Name = "CurrentUser")]
+    public ApplicationUser? CurrentUser { get; set; }
+    [CascadingParameter(Name = "CurrentRoles")]
+    public string? CurrentRoles { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine(CurrentUser is not null ? CurrentUser.UserName : "No user");
+        return base.OnInitializedAsync();
+    }
+}

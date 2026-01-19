@@ -1,0 +1,61 @@
+// ==========================================================================
+// Features: Dashboard
+// ==========================================================================
+// Estilos específicos para el dashboard
+
+.dashboard-container {
+  padding: $spacing-lg;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+}
+
+.dashboard-title {
+  font-size: $font-size-h2;
+  font-weight: $font-weight-bold;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.stat-card {
+  padding: $spacing-lg;
+  background: $color-bg-primary;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  
+  .stat-value {
+    font-size: $font-size-h1;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+  
+  .stat-label {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: $spacing-sm;
+  }
+}
+
+// Iconos y sidebar heredados
+.dashboard-icon {
+  margin-right: $spacing-md;
+}
+
+.dashboard-sidebar__logo {
+  height: auto;
+  width: 100%;
+}
+
+.dashboard-sidebar__header {
+  display: block;
+  width: 100%;
+}

@@ -1,0 +1,25 @@
+﻿@using NexoRecruiter.Web.Features.Auth.Pages
+@using NexoRecruiter.Web.Features.Shared.Components
+
+<CascadingAuthenticationState>
+    <CurrentUserProvider>
+        <Router AppAssembly="@typeof(Program).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData"
+                                    DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        <RedirectToLoginPage />
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Found>
+
+            <NotFound>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p>No encontrado</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CurrentUserProvider>
+</CascadingAuthenticationState>

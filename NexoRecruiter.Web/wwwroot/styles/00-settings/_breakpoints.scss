@@ -1,0 +1,33 @@
+// ==========================================================================
+// Settings: Breakpoints
+// ==========================================================================
+// Define los breakpoints para responsive design
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-2xl: 1400px;
+
+// Mapa de breakpoints
+$breakpoints: (
+    xs: $breakpoint-xs,
+    sm: $breakpoint-sm,
+    md: $breakpoint-md,
+    lg: $breakpoint-lg,
+    xl: $breakpoint-xl,
+    2xl: $breakpoint-2xl
+);
+
+// Mixin para media queries
+@mixin media($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        $value: map-get($breakpoints, $breakpoint);
+        @media (min-width: $value) {
+            @content;
+        }
+    } @else {
+        @warn "Breakpoint '#{$breakpoint}' no existe en $breakpoints";
+    }
+}

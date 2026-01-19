@@ -1,0 +1,33 @@
+// ==========================================================================
+// Main SCSS Entry Point
+// ==========================================================================
+// Este archivo importa todos los módulos SCSS en el orden correcto (ITCSS)
+
+// 00 - Settings: Variables y configuración
+@import '00-settings/normalize';
+@import '00-settings/colors';
+@import '00-settings/spacing';
+@import '00-settings/typography';
+@import '00-settings/breakpoints';
+
+// 01 - Base: Resets y estilos base
+@import '01-base/reset';
+@import '01-base/typography';
+
+// 02 - Layouts: Sistemas de layout
+@import '02-layouts/container';
+@import '02-layouts/grid';
+
+// 03 - Components: Componentes globales
+@import '03-components/buttons';
+@import '03-components/cards';
+
+// 04 - Features: Estilos por feature
+@import '04-features/auth';
+@import '04-features/dashboard';
+@import '04-features/jobs';
+
+// 05 - Utilities: Clases de utilidad
+@import '05-utilities/spacing';
+@import '05-utilities/text';
+@import '05-utilities/display';

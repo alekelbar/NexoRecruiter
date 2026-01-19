@@ -1,0 +1,28 @@
+// ==========================================================================
+// Components: Buttons
+// ==========================================================================
+// Estilos de botones globales (si no usas MudBlazor para todo)
+
+// Nota: Si usas MudButton de MudBlazor, puedes dejar esto vacío
+// o crear extensiones/variantes personalizadas
+
+.btn-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border: none;
+  border-radius: 4px;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,38 @@
+// ==========================================================================
+// Layouts: Container
+// ==========================================================================
+// Contenedores de ancho máximo
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+
+  @include media(sm) {
+    max-width: 540px;
+  }
+
+  @include media(md) {
+    max-width: 720px;
+  }
+
+  @include media(lg) {
+    max-width: 960px;
+  }
+
+  @include media(xl) {
+    max-width: 1140px;
+  }
+
+  @include media(2xl) {
+    max-width: 1320px;
+  }
+}
+
+.container-fluid {
+  width: 100%;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+}
