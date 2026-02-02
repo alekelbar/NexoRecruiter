@@ -24,6 +24,7 @@
   <ItemGroup>
     <!-- dotnet watch monitoreará cambios en SCSS -->
     <Watch Include="wwwroot\styles\**\*.scss" />
+    <Debug Include="wwwroot\styles\**\*.scss"/>
   </ItemGroup>
 
   <!-- 1. Excluir archivos TS del output -->

@@ -1,0 +1,24 @@
+// ==========================================================================
+// Component: NexoDrawer Overrides
+// ==========================================================================
+// Overrides de MudBlazor para el componente NexoDrawer
+
+.nexo-drawer {
+    background-color: var(--mud-palette-drawer-background) !important;
+    color: var(--mud-palette-drawer-text) !important;
+}
+
+// Estado activo
+.mud-nav-link.mud-ripple.active {
+    background-color: var(--mud-palette-primary) !important;
+    color: var(--mud-palette-primary-text) !important;
+    font-weight: 600;
+
+    .mud-icon-root {
+        color: var(--mud-palette-primary-text) !important;
+    }
+
+    .mud-nav-link-text {
+        color: var(--mud-palette-primary-text) !important;
+    }
+}

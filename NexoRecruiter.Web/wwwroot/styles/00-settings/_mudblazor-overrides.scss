@@ -1,0 +1,76 @@
+// ==========================================================================
+// Settings: MudBlazor Theme Overrides
+// ==========================================================================
+// Sobrescribe las CSS Variables de MudBlazor usando nuestras variables SCSS
+// Esto permite centralizar los colores en _colors.scss
+
+:root {
+  // Colores primarios
+  --mud-palette-primary: #{$color-primary} !important;
+  --mud-palette-primary-rgb: 41, 157, 145 !important;
+  --mud-palette-primary-text: #ffffff !important;
+  --mud-palette-primary-darken: #1f7a6f !important;
+  --mud-palette-primary-lighten: #3bbfb3 !important;
+
+  // Colores secundarios
+  --mud-palette-secondary: #{$color-secondary} !important;
+  --mud-palette-secondary-rgb: 71, 85, 105 !important;
+  --mud-palette-secondary-text: #ffffff !important;
+
+  // Colores terciarios
+  --mud-palette-tertiary: #{$color-tertiary} !important;
+  --mud-palette-tertiary-rgb: 14, 165, 233 !important;
+  --mud-palette-tertiary-text: #ffffff !important;
+
+  // Colores de fondo
+  --mud-palette-background: #{$color-bg-primary} !important;
+  --mud-palette-background-grey: #{$color-bg-primary} !important;
+  --mud-palette-surface: #{$color-surface} !important;
+
+  // AppBar
+  --mud-palette-appbar-background: #{$color-appbar-bg} !important;
+  --mud-palette-appbar-text: #{$color-appbar-text} !important;
+
+  // Drawer
+  --mud-palette-drawer-background: #{$color-drawer-bg} !important;
+  --mud-palette-drawer-text: #{$color-drawer-text} !important;
+
+  // Colores de estado
+  --mud-palette-success: #{$color-success} !important;
+  --mud-palette-success-rgb: 77, 175, 110 !important;
+  --mud-palette-success-text: #ffffff !important;
+
+  --mud-palette-warning: #{$color-warning} !important;
+  --mud-palette-warning-rgb: 245, 158, 11 !important;
+  --mud-palette-warning-text: #0f172a !important;
+
+  --mud-palette-error: #{$color-error} !important;
+  --mud-palette-error-rgb: 231, 61, 28 !important;
+  --mud-palette-error-text: #ffffff !important;
+
+  --mud-palette-info: #{$color-tertiary} !important;
+  --mud-palette-info-rgb: 14, 165, 233 !important;
+  --mud-palette-info-text: #ffffff !important;
+
+  // Colores de texto
+  --mud-palette-text-primary: #{$color-text-primary} !important;
+  --mud-palette-text-secondary: #{$color-text-secondary} !important;
+  --mud-palette-text-disabled: #{$color-text-light} !important;
+
+  // Colores de bordes y divisores
+  --mud-palette-divider: #{$color-border} !important;
+  --mud-palette-divider-light: rgba(0, 0, 0, 0.08) !important;
+
+  // Hover states (generados desde primary)
+  --mud-palette-action-default: rgba(0, 0, 0, 0.54) !important;
+  --mud-palette-action-disabled: rgba(0, 0, 0, 0.26) !important;
+  --mud-palette-action-disabled-background: rgba(0, 0, 0, 0.12) !important;
+
+  // Botones
+  --mud-button-filled-primary-hover-background: #{$color-primary} !important;
+  --mud-button-filled-primary-hover-opacity: 0.88 !important;
+  --mud-button-outlined-primary-border: #{$color-primary} !important;
+  --mud-button-outlined-primary-hover-background: rgba(41, 157, 145, 0.08) !important;
+  --mud-button-text-primary-hover-background: rgba(41, 157, 145, 0.08) !important;
+
+}

@@ -6,6 +6,7 @@
 // 00 - Settings: Variables y configuración
 @import '00-settings/normalize';
 @import '00-settings/colors';
+@import '00-settings/mudblazor-overrides';
 @import '00-settings/spacing';
 @import '00-settings/typography';
 @import '00-settings/breakpoints';
@@ -21,11 +22,13 @@
 // 03 - Components: Componentes globales
 @import '03-components/buttons';
 @import '03-components/cards';
+@import '03-components/nexo-drawer';
 
 // 04 - Features: Estilos por feature
 @import '04-features/auth';
 @import '04-features/dashboard';
 @import '04-features/jobs';
+@import '04-features/account';
 
 // 05 - Utilities: Clases de utilidad
 @import '05-utilities/spacing';

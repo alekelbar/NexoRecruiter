@@ -1,62 +1,67 @@
 @page "/Account"
+@using Microsoft.AspNetCore.Identity
+@using NexoRecruiter.Application.DTOs.Account
 @using NexoRecruiter.Web.Features.Auth.Models
 @using NexoRecruiter.Web.Features.Dashboard.Layouts
 @attribute [Authorize]
 @layout DashboardLayout
+@inject UserManager<ApplicationUser> _userManager
+@inject ISnackbar Snackbar
+@inject NavigationManager navigationManager
 
-<LayoutHead>
-    <link href="@(Assets["styles/Features/Account/Pages/AccountPage.css"])" rel="stylesheet" />
-</LayoutHead>
-
-<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="module-account-page">
     <MudGrid>
         <MudItem xs="12">
             <MudCard Class="pa-4">
-                <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                    <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
-                        <MudStack Justify="Justify.SpaceBetween">
-                            <MudText Typo="Typo.h6">@(CurrentUser?.FullName?? "")</MudText>
+                <MudGrid Justify="Justify.FlexStart" Spacing="8">
+                    <MudItem Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
+                        <MudStack Row>
+                            <MudAvatar>@((CurrentUser?.FullName ?? CurrentUser?.NickName ?? "").FirstOrDefault())
+                            </MudAvatar>
                         </MudStack>
-                    </MudStack>
-                    <MudButton Color="@Color.Primary" Variant="Variant.Filled">
-                        Edit <MudIcon Class="ml-8" Icon="@Icons.Material.Filled.Edit" Style="color: white;"></MudIcon>
-                    </MudButton>
-                </MudStack>
+                    </MudItem>
+                    <MudItem>
+                        <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Wrap="Wrap.Wrap">
+                            <MudButton Color="@Color.Primary" Variant="Variant.Filled" OnClick="ToggleEdit"
+                                       EndIcon="@Icons.Material.Filled.Edit">
+                                Edit
+                            </MudButton>
+                            <MudButton Color="@Color.Secondary" Variant="Variant.Filled" OnClick="SaveChanges"
+                                       Disabled="@isNotEditable" EndIcon="@Icons.Material.Filled.Save">
+                                Save
+                            </MudButton>
+                            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="GoToChangePassword">
+                                Change Password
+                            </MudButton>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
                 <MudGrid>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.subtitle2" Class="mt-4">Nombre completo</MudText>
-                        <MudTextField T="string" Placeholder="Nombre completo" Variant="Variant.Filled"></MudTextField>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Nombre completo</MudText>
+                        <MudTextField Disabled=@isNotEditable T="string" Placeholder="Nombre completo"
+                                      Variant="Variant.Filled" @bind-Value="userAccountDTO.FullName"></MudTextField>
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.subtitle2" Class="mt-4">Puesto de Trabajo</MudText>
-                        <MudTextField T="string" Placeholder="Puesto" Variant="Variant.Filled"></MudTextField>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Nickname</MudText>
+                        <MudTextField Disabled=@isNotEditable T="string" Placeholder="Nickname" Variant="Variant.Filled"
+                                      @bind-Value="userAccountDTO.Nickname"></MudTextField>
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.subtitle2" Class="mt-4">Fecha de creación</MudText>
-                        <MudTextField T="string" Placeholder="Fecha de creación" Variant="Variant.Filled">
-                        </MudTextField>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Puesto de Trabajo</MudText>
+                        <MudTextField Disabled=@isNotEditable T="string" Placeholder="Puesto" Variant="Variant.Filled"
+                                      @bind-Value="userAccountDTO.JobTitle"></MudTextField>
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.subtitle2" Class="mt-4">Último acceso</MudText>
-                        <MudTextField T="string" Placeholder="Último acceso" Variant="Variant.Filled"></MudTextField>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Fecha de creación</MudText>
+                        <MudTextField T="string"
+                                      Value="@userAccountDTO.CreatedAt?.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))"
+                                      Variant="Variant.Filled" Disabled="true" />
                     </MudItem>
-                    <MudItem xs="12">
-                        <MudText Typo="Typo.subtitle1" Class="mb-4">My Email Address</MudText>
-                        <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center" Spacing="2">
-                            <MudChip Class="rounded-circle" Color="Color.Primary" Variant="Variant.Filled" T="Icons">
-                                <MudIcon Icon="@Icons.Material.Filled.Email" Style="color: white;"></MudIcon>
-                            </MudChip>
-                            <MudStack>
-                                <MudText Typo="Typo.h6">@(CurrentUser?.Email ?? "")</MudText>
-                                <MudText Typo="Typo.caption">Last login one month ago</MudText>
-                            </MudStack>
-                        </MudStack>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <MudStack Row>
-                            <MudChip Variant="Variant.Filled" Color="Color.Primary" T="string">Verified</MudChip>
-                            <MudChip Color="Color.Success" T="string">Active</MudChip>
-                        </MudStack>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.body1" Class="mt-4">Último acceso</MudText>
+                        <MudTextField T="string" Value="@GetRelativeTime(userAccountDTO.LastLoginAt ?? DateTime.Now)"
+                                      Variant="Variant.Filled" Disabled="true" />
                     </MudItem>
                 </MudGrid>
             </MudCard>
@@ -69,10 +74,83 @@
     public ApplicationUser? CurrentUser { get; set; }
     [CascadingParameter(Name = "CurrentRoles")]
     public string? CurrentRoles { get; set; }
+    [CascadingParameter(Name = "DashboardLayout")]
+    public DashboardLayout? dashboardLayout { get; set; }
+    private UserAccountDTO userAccountDTO { get; set; } = new UserAccountDTO();
+
+    private bool isNotEditable = true;
+
+    public void ToggleEdit()
+    {
+        isNotEditable = !isNotEditable;
+    }
+
+    public void GoToChangePassword()
+    {
+        navigationManager.NavigateTo("/ChangePassword");
+    }
+
+    public async Task SaveChanges()
+    {
+        CurrentUser!.FullName = userAccountDTO.FullName;
+        CurrentUser!.JobTitle = userAccountDTO.JobTitle;
+        CurrentUser!.NickName = userAccountDTO.Nickname;
+
+        var result = await _userManager.UpdateAsync(CurrentUser!);
+
+        if (result.Succeeded)
+        {
+            Snackbar.Add("Tus cambios fueron guardados correctamente", Severity.Success, config =>
+            {
+                config.VisibleStateDuration = 3000;
+                config.ShowCloseIcon = true;
+                config.Icon = Icons.Material.Filled.CheckCircle;
+            });
+        }
+        else
+        {
+            Snackbar.Add("Ocurrió un error al guardar tus cambios", Severity.Error, config =>
+            {
+                config.VisibleStateDuration = 5000;
+                config.ShowCloseIcon = true;
+                config.Icon = Icons.Material.Filled.Error;
+            });
+        }
+        isNotEditable = true;
+    }
 
     protected override Task OnInitializedAsync()
     {
-        Console.WriteLine(CurrentUser is not null ? CurrentUser.UserName : "No user");
+        if (CurrentUser is not null)
+        {
+            userAccountDTO = new UserAccountDTO
+            {
+                CreatedAt = CurrentUser?.CreatedAt.Date ?? DateTime.Now.Date,
+                Email = CurrentUser?.Email ?? "",
+                FullName = CurrentUser?.FullName ?? "",
+                LastLoginAt = CurrentUser?.LastLoginAt?.Date ?? DateTime.Now.Date,
+                JobTitle = CurrentUser?.JobTitle ?? "",
+                Nickname = CurrentUser?.NickName ?? ""
+            };
+        }
+
+        if (dashboardLayout is not null)
+        {
+            dashboardLayout.setCurrentPage("Account", path: "/Account");
+        }
         return base.OnInitializedAsync();
+    }
+
+    private string GetRelativeTime(DateTime date)
+    {
+        var timeSpan = DateTime.Now - date;
+
+        if (timeSpan.TotalMinutes < 1) return "Justo ahora";
+        if (timeSpan.TotalHours < 1) return $"Hace {(int)timeSpan.TotalMinutes} min";
+        if (timeSpan.TotalDays < 1) return $"Hace {(int)timeSpan.TotalHours}h";
+        if (timeSpan.TotalDays < 7) return $"Hace {(int)timeSpan.TotalDays} días";
+        if (timeSpan.TotalDays < 30) return date.ToString("dd 'de' MMM", new System.Globalization.CultureInfo("es-ES"));
+
+        return date.ToString("dd/MM/yyyy");
     }
 }

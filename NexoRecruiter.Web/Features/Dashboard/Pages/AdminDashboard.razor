@@ -15,4 +15,17 @@
     public ApplicationUser? CurrentUser { get; set; }
     [CascadingParameter(Name = "CurrentRoles")]
     public string? CurrentRoles { get; set; }
+
+    [CascadingParameter(Name = "DashboardLayout")]
+    public DashboardLayout? dashboardLayout { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (dashboardLayout is not null)
+        {
+            dashboardLayout.setCurrentPage("Dashboard", path: "/dashboard");
+        }
+
+        return base.OnInitializedAsync();
+    }
 }

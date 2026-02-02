@@ -2,28 +2,33 @@
 // Settings: Colors
 // ==========================================================================
 // Define todas las variables de color del proyecto
+// Sincronizado con MudBlazor PaletteLight en AppShell.razor
 
-// Colores primarios
-$color-primary: #3498db;
-$color-secondary: #2ecc71;
-$color-accent: #e74c3c;
+// Colores primarios - Tema Profesional/Corporativo
+$color-primary: #299D91;        // Teal corporativo
+$color-secondary: #191919;      // Gris oscuro
+$color-tertiary: #0EA5E9;       // Azul brillante (acentos)
 
 // Colores de texto
-$color-text-primary: #2c3e50;
-$color-text-secondary: #7f8c8d;
-$color-text-light: #95a5a6;
+$color-text-primary: #191919;   // Negro
+$color-text-secondary: #666666; // Gris medio
+$color-text-light: #878787;     // Gris claro
 
 // Colores de fondo
-$color-bg-primary: #ffffff;
-$color-bg-secondary: #f8f9fa;
-$color-bg-dark: #2c3e50;
+$color-bg-primary: #F5F5F5;     // Gris muy claro
+$color-surface: #FFFFFF;        // Cards, panels
+
+// Colores de appbar y drawer
+$color-appbar-bg: #000000;      // AppBar blanco
+$color-appbar-text: #191919;    // Texto oscuro en appbar
+$color-drawer-bg: #191919;      // Drawer negro
+$color-drawer-text: #FFFFFF;    // Texto blanco en drawer
 
 // Colores de estado
-$color-success: #27ae60;
-$color-warning: #f39c12;
-$color-error: #e74c3c;
-$color-info: #3498db;
+$color-success: #4DAF6E;        // Verde
+$color-warning: #F59E0B;        // Ámbar
+$color-error: #E73D1C;          // Rojo coral
 
-// Colores de borde
-$color-border: #e1e8ed;
-$color-border-dark: #bdc3c7;
+// Colores de borde (generados desde primarios)
+$color-border: #E8E8E8;
+$color-border-dark: #9F9F9F;

@@ -7,34 +7,37 @@
 @implements ILayoutHeadHost
 @inherits LayoutComponentBase
 
-<CascadingValue Value="this" IsFixed>
+<CascadingValue Value="this" IsFixed Name="DashboardLayout">
     <HeadContent>
         @pageHead
     </HeadContent>
-        <AppShell>
-            <MudLayout Class="dashboard">
-                <NexoAppbar />
-                <NexoDrawer IsOpen="_drawerController.IsOpen" />
-                <CascadingValue Value="_drawerController">
-                    <MudMainContent>
-                        <MudStack Row>
-                            <MudIconButton OnClick="_drawerController.Toggle"
-                                Icon="@(_drawerController.IsOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
-                                aria-label="Open Drawer" />
-                            <MudBreadcrumbs Items="_breadcrumbItems" />
-                        </MudStack>
-                        @Body
-                    </MudMainContent>
-                </CascadingValue>
-            </MudLayout>
-        </AppShell>
+    <AppShell>
+        <MudLayout Class="dashboard">
+            <CascadingValue Value="_drawerController">
+                <NexoAppbar drawerController="_drawerController" />
+                <NexoDrawer IsOpen="_drawerController.IsOpen" Toggle="_drawerController.Toggle" />
+                <MudMainContent>
+                    <MudStack Row>
+                        <MudBreadcrumbs Items="_breadcrumbItems" />
+                    </MudStack>
+                    @Body
+                </MudMainContent>
+            </CascadingValue>
+        </MudLayout>
+    </AppShell>
 </CascadingValue>
 
 @code {
     private List<BreadcrumbItem> _breadcrumbItems = new() {
         new("Home", "/dashboard"),
-        new("dashboard", "/dashboard"),
     };
+
+    public void setCurrentPage(string currentPage, string path)
+    {
+        if (_breadcrumbItems.Count > 1) _breadcrumbItems.RemoveAt(1);
+        _breadcrumbItems.Add(new BreadcrumbItem(text: currentPage, path));
+        StateHasChanged();
+    }
 
     private RenderFragment? pageHead;
     public DrawerController _drawerController = new();

@@ -5,15 +5,23 @@
 @inject UserManager<ApplicationUser> _userManager
 @implements IDisposable
 
-<CascadingValue Value="_currentUser" Name="CurrentUser">
-    <CascadingValue Value="_currentRoles" Name="CurrentRoles">
-        @ChildContent
+@if (_isLoading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <CascadingValue Value="_currentUser" Name="CurrentUser" IsFixed="true">
+        <CascadingValue Value="_currentRoles" Name="CurrentRoles" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
     </CascadingValue>
-</CascadingValue>
+}
 
 @code {
     public ApplicationUser? _currentUser { get; set; }
     public string? _currentRoles { get; set; }
+    private bool _isLoading = true;
 
     private readonly SemaphoreSlim _refreshLock = new(1, 1);
 
@@ -24,6 +32,7 @@
     {
         _authStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
         await RefreshUserAsync();
+        _isLoading = false;
     }
 
     private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)

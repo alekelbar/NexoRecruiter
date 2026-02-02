@@ -53,7 +53,10 @@ namespace NexoRecruiter.Web.Features.Auth.Helpers
                         Email = adminEmail,
                         IsActive = true,
                         FullName = "Admin user",
-                        JobTitle = adminJobTitle
+                        JobTitle = adminJobTitle,
+                        LastLoginAt = DateTime.UtcNow,
+                        CreatedAt = DateTime.UtcNow,
+                        NickName = "ADMIN"
                     };
 
                     var adminUserCreation = await userManager.CreateAsync(adminUser, adminPassword);

@@ -1,26 +1,22 @@
-<MudDrawer Open="IsOpen" Anchor="Anchor.Start" Elevation="1" Variant="@DrawerVariant.Persistent">
+@using NexoRecruiter.Web.Features.Dashboard.Helpers
+@inject IDialogService Dialog
+
+
+<MudDrawer Width="280px" Class="nexo-drawer p-4" Open="IsOpen" OpenChanged="Toggle" Anchor="Anchor.Start" Elevation="1"
+           Variant="@DrawerVariant.Responsive">
     <MudDrawerHeader Class="dashboard-sidebar__header">
         <MudStack StretchItems="StretchItems.None">
-            <MudImage Class="dashboard-sidebar__logo" Src="@Assets[key: "images/nexo-logo.png"]"></MudImage>
-            <MudDivider />
+            <MudImage Class="dashboard-sidebar__logo" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
         </MudStack>
     </MudDrawerHeader>
-    <MudText Typo="Typo.h6" Class="ml-4 my-3">General</MudText>
     <MudNavMenu>
-
-        <MudText Typo="Typo.caption" Class="px-4 pt-3 pb-2">General</MudText>
+        <MudText Typo="Typo.caption" Class="mt-4">General</MudText>
 
         <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
             Dashboard
         </MudNavLink>
 
-        <MudNavLink Href="/account" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountCircle">
-            Perfil
-        </MudNavLink>
-
-        <MudDivider Class="my-2" />
-
-        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Reclutamiento</MudText>
+        <MudText Typo="Typo.caption" Class="mt-4">Reclutamiento</MudText>
 
         <MudNavLink Href="/jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WorkOutline">
             Vacantes
@@ -34,19 +30,15 @@
             Candidatos
         </MudNavLink>
 
-        <MudDivider Class="my-2" />
-
-        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">IA</MudText>
+        <MudText Typo="Typo.caption" Class="mt-4">IA</MudText>
 
         <MudNavLink Href="/ai-evaluations" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Psychology">
             Evaluaciones IA
         </MudNavLink>
 
-        <MudDivider Class="my-2" />
-
         @if (CurrentRoles?.Contains("Admin") == true)
         {
-            <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Administración</MudText>
+            <MudText Typo="Typo.caption" Class="mt-4">Administración</MudText>
 
             <MudNavLink Href="/admin/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">
                 Usuarios
@@ -56,21 +48,74 @@
                 Configuración
             </MudNavLink>
 
-            <MudDivider Class="my-2" />
         }
 
-        <MudText Typo="Typo.caption" Class="px-4 pt-2 pb-2">Público</MudText>
+        <MudText Typo="Typo.caption" Class="mt-4">Público</MudText>
 
         <MudNavLink Href="/careers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">
             Portal de empleo
         </MudNavLink>
-
     </MudNavMenu>
+
+    <MudSpacer />
+
+    <MudStack Row>
+        <MudAvatar>@((CurrentUser?.FullName ?? CurrentUser?.NickName ?? "").FirstOrDefault())</MudAvatar>
+        <MudStack Spacing="0">
+            <MudText Typo=Typo.body1>Alexander Barquero</MudText>
+            <MudLink Href="/Account" Color=Color.Inherit>
+                <MudText Typo=Typo.caption>Ver perfil</MudText>
+            </MudLink>
+        </MudStack>
+    </MudStack>
+
+
+    <MudButton OnClick="OpenDialogAsync" Class="mt-8" ButtonType=ButtonType.Button Variant=Variant.Outlined
+               Color=Color.Inherit Icon="@Icons.Material.Filled.Logout">
+        Cerrar Sesión
+    </MudButton>
 </MudDrawer>
+
+<form @ref="logoutForm" method="post" action="/auth/logout" id="logout-form" style="display: none;">
+    <AntiforgeryToken />
+    <input type="hidden" name="returnUrl" value="/login" />
+</form>
 
 @code {
     [CascadingParameter(Name = "CurrentRoles")]
     public string? CurrentRoles { get; set; }
+    [CascadingParameter(Name = "CurrentUser")]
+    public ApplicationUser? CurrentUser { get; set; }
     [Parameter]
     public bool IsOpen { get; set; }
+
+    [Parameter]
+    public EventCallback Toggle { get; set; }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    private ElementReference logoutForm;
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+    private async Task HandleLogout()
+    {
+        var form = await JS.InvokeAsync<IJSObjectReference>("eval", "document.getElementById('logout-form')");
+        await form.InvokeVoidAsync("submit");
+    }
+
+    private async Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog= await Dialog.ShowAsync<ConfirmLogoutDialog>("¿Desea cerrar sesión?", options);
+        var result = await dialog.Result;
+
+        if(!result!.Canceled){
+            await HandleLogout();
+        }
+    }
 }

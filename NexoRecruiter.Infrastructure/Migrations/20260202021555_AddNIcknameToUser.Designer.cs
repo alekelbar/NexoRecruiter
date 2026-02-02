@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NexoRecruiter.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using NexoRecruiter.Infrastructure.Persistence;
 namespace NexoRecruiter.Infrastructure.Migrations
 {
     [DbContext(typeof(RecruiterDbContext))]
-    partial class RecruiterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260202021555_AddNIcknameToUser")]
+    partial class AddNIcknameToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

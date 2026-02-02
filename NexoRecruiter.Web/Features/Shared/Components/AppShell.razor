@@ -13,30 +13,8 @@
 @code {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    private readonly MudTheme _theme = new MudTheme
-    {
-        PaletteLight = new PaletteLight
-        {
-            Primary = "#135D7E", // Azul petróleo
-            Secondary = "#333333", // Gris oscuro
-            Tertiary = "#60B6E3", // Azul cielo (acentos / IA)
-
-            Background = "#F5F7FA", // Fondo claro
-            Surface = "#FFFFFF", // Cards, panels
-
-            AppbarBackground = "#135D7E",
-            AppbarText = "#FFFFFF",
-
-            DrawerBackground = "#FFFFFF",
-            DrawerText = "#333333",
-
-            Success = "#A7E4C3", // Aprobado
-            Warning = "#FFDB6E", // Advertencia
-            Error = "#F67280", // Error
-
-            TextPrimary = "#1F2933",
-            TextSecondary = "#4B5563"
-        }
-    };
+    
+    // Theme mínimo para activar CSS Variables
+    // Los colores reales se sobrescriben en _mudblazor-overrides.scss
+    private readonly MudTheme _theme = new();
 }
