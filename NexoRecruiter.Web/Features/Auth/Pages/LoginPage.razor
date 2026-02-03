@@ -1,7 +1,7 @@
 @page "/login"
 @attribute [AllowAnonymous]
 
-@using NexoRecruiter.Application.Auth.DTOs
+@using NexoRecruiter.Application.DTOs.Auth;
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject IJSRuntime JSRuntime
@@ -11,71 +11,57 @@
     string imageBG = $"{Assets["images/login-lateral.svg"]}";
 }
 
-<MudGrid Class="login-page-container" Spacing="0">
-    <MudItem xs="12" lg="6" Class="login-page__left-side">
-        <MudCard Elevation="0" class="login-card">
-            <MudText Typo="Typo.h5" Class="login__title mb-10">Iniciar Ahora</MudText>
+<MudPaper Class="login-page-container" Spacing="0">
+    <MudCard Elevation="0" class="login-card">
 
-            <form id="loginForm" method="post" action="/auth/login" class="d-flex flex-column gap-5"
-                  @onsubmit="ValidateBeforeSubmit" @onsubmit:preventDefault="true">
-                <AntiforgeryToken />
+        <MudImage Class="login-icon" Src="@Assets["images/logo-login.png"]"></MudImage>
+        <MudElement HtmlTag="form" id="loginForm" method="post" action="/auth/login" class="d-flex flex-column gap-5"
+                    @onsubmit="ValidateBeforeSubmit">
+            <AntiforgeryToken />
 
-                <div>
-                    <MudText Class="login-card__label">Correo</MudText>
-                    <MudTextField @bind-Value="_email" 
-                                  Label="Email" 
-                                  Variant="Variant.Filled"
-                                  InputType="InputType.Email" 
-                                  id="emailField"
-                                  Error="@_emailError"
-                                  ErrorText="@_emailErrorText" />
-                    <input type="hidden" name="email" value="@_email" />
-                </div>
+            <div>
+                <MudText Class="login-card__label">Email</MudText>
+                <MudTextField Class="login-form__input" @bind-Value="_email" Variant="Variant.Outlined"
+                              Placeholder="JonhDoe@gmail.com" InputType="InputType.Email" id="emailField" Error="@_emailError"
+                              ErrorText="@_emailErrorText" />
+                <input type="hidden" name="email" value="@_email" />
+            </div>
 
-                <div>
-                    <MudText Class="login-card__label">Contraseña</MudText>
-                    <MudTextField @bind-Value="_password" 
-                                  Label="Password" 
-                                  Variant="Variant.Filled"
-                                  InputType="@(ShowPassword? InputType.Text: InputType.Password)" 
-                                  Adornment="Adornment.End"
-                                  AdornmentIcon="@Icons.Material.Filled.RemoveRedEye" 
-                                  AdornmentColor="Color.Primary"
-                                  OnAdornmentClick="ShowPasswordField" 
-                                  id="passwordField"
-                                  Error="@_passwordError"
-                                  ErrorText="@_passwordErrorText" />
-                    <input type="hidden" name="password" value="@_password" />
-                </div>
+            <div>
+                <MudStack Row Justify=Justify.SpaceBetween AlignItems=AlignItems.Center>
+                    <MudText Class="login-card__label">Password</MudText>
+                    <MudLink Href="/external-password-recovery" Typo=Typo.caption>Forgot Password?</MudLink>
+                </MudStack>
+                <MudTextField Class="login-form__input" @bind-Value="_password" Variant="Variant.Outlined"
+                              InputType="@(ShowPassword? InputType.Text: InputType.Password)" Placeholder="●●●●●●●●●●●●●●"
+                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.RemoveRedEye"
+                              AdornmentColor="Color.Primary" OnAdornmentClick="ShowPasswordField" id="passwordField"
+                              Error="@_passwordError" ErrorText="@_passwordErrorText" />
+                <input type="hidden" name="password" value="@_password" />
+            </div>
 
-                <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+            <MudCheckBox Class="login-form__keep-me-sign" Value="true">Keep me SignIn</MudCheckBox>
 
-                <MudButton Class="btn-signup" Variant="Variant.Filled" Color="Color.Primary"
-                           ButtonType="ButtonType.Submit">
-                    Inicia Sesión
-                </MudButton>
+            <input type="hidden" name="returnUrl" value="@ReturnUrl" />
 
-                @if (!string.IsNullOrEmpty(_errorMessage))
-                {
-                    <MudAlert Variant="Variant.Filled" Severity="Severity.Error">@_errorMessage</MudAlert>
-                }
-            </form>
-        </MudCard>
-    </MudItem>
+            <MudButton Class="btn-signup" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                Login
+            </MudButton>
 
-    <MudItem xs="12" lg='6' Class="login-page__right-side d-none d-lg-block">
-        <div class="login-page__background-image d-none d-lg-block" style="background-image: url(@imageBG)">
-        </div>
-    </MudItem>
-</MudGrid>
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Variant="Variant.Filled" Severity="Severity.Error">@_errorMessage</MudAlert>
+            }
+        </MudElement>
+    </MudCard>
+</MudPaper>
 
 @code {
     private bool ShowPassword = false;
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _errorMessage = string.Empty;
-    
-    // Estados de error para MudTextField
+
     private bool _emailError = false;
     private string _emailErrorText = string.Empty;
     private bool _passwordError = false;

@@ -1,0 +1,36 @@
+// --------------------------------------------------------------------------
+// Legacy login layout styles migrated from CSS
+// --------------------------------------------------------------------------
+.login-page-container {
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .login-card {
+    max-width: 400px;
+    width: 100%;
+    padding: 16px;
+
+    .login-icon {
+      margin-bottom: 64px;
+    }
+
+    .login-form__input {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .login-form {
+      &__keep-me-sign .mud-icon-root {
+        width: max-content;
+      }
+
+      &__keep-me-sign input[type="checkbox"] {
+        border: 1px solid blue;
+      }
+    }
+  }
+}

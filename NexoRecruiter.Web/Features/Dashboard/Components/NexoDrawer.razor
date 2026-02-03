@@ -9,57 +9,59 @@
             <MudImage Class="dashboard-sidebar__logo" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
         </MudStack>
     </MudDrawerHeader>
-    <MudNavMenu>
-        <MudText Typo="Typo.caption" Class="mt-4">General</MudText>
+    <MudElement HtmlTag="div" Class="nexo-drawer__content">
 
-        <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
-            Dashboard
-        </MudNavLink>
+        <MudNavMenu>
+            <MudText Typo="Typo.caption" Class="mt-4">General</MudText>
 
-        <MudText Typo="Typo.caption" Class="mt-4">Reclutamiento</MudText>
-
-        <MudNavLink Href="/jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WorkOutline">
-            Vacantes
-        </MudNavLink>
-
-        <MudNavLink Href="/applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AssignmentInd">
-            Aplicaciones
-        </MudNavLink>
-
-        <MudNavLink Href="/candidates" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">
-            Candidatos
-        </MudNavLink>
-
-        <MudText Typo="Typo.caption" Class="mt-4">IA</MudText>
-
-        <MudNavLink Href="/ai-evaluations" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Psychology">
-            Evaluaciones IA
-        </MudNavLink>
-
-        @if (CurrentRoles?.Contains("Admin") == true)
-        {
-            <MudText Typo="Typo.caption" Class="mt-4">Administración</MudText>
-
-            <MudNavLink Href="/admin/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">
-                Usuarios
+            <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
+                Dashboard
             </MudNavLink>
 
-            <MudNavLink Href="/admin/settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
-                Configuración
+            <MudText Typo="Typo.caption" Class="mt-4">Reclutamiento</MudText>
+
+            <MudNavLink Href="/jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WorkOutline">
+                Vacantes
             </MudNavLink>
 
-        }
+            <MudNavLink Href="/applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AssignmentInd">
+                Aplicaciones
+            </MudNavLink>
 
-        <MudText Typo="Typo.caption" Class="mt-4">Público</MudText>
+            <MudNavLink Href="/candidates" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">
+                Candidatos
+            </MudNavLink>
 
-        <MudNavLink Href="/careers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">
-            Portal de empleo
-        </MudNavLink>
-    </MudNavMenu>
+            <MudText Typo="Typo.caption" Class="mt-4">IA</MudText>
+
+            <MudNavLink Href="/ai-evaluations" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Psychology">
+                Evaluaciones IA
+            </MudNavLink>
+
+            @if (CurrentRoles?.Contains("Admin") == true)
+            {
+                <MudText Typo="Typo.caption" Class="mt-4">Administración</MudText>
+
+                <MudNavLink Href="/admin/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">
+                    Usuarios
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
+                    Configuración
+                </MudNavLink>
+            }
+
+            <MudText Typo="Typo.caption" Class="mt-4">Público</MudText>
+
+            <MudNavLink Href="/careers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">
+                Portal de empleo
+            </MudNavLink>
+        </MudNavMenu>
+    </MudElement>
 
     <MudSpacer />
 
-    <MudStack Row>
+    <MudStack Class="nexo-drawer__profile-info" Row>
         <MudAvatar>@((CurrentUser?.FullName ?? CurrentUser?.NickName ?? "").FirstOrDefault())</MudAvatar>
         <MudStack Spacing="0">
             <MudText Typo=Typo.body1>Alexander Barquero</MudText>
@@ -111,10 +113,11 @@
     private async Task OpenDialogAsync()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
-        var dialog= await Dialog.ShowAsync<ConfirmLogoutDialog>("¿Desea cerrar sesión?", options);
+        var dialog = await Dialog.ShowAsync<ConfirmLogoutDialog>("¿Desea cerrar sesión?", options);
         var result = await dialog.Result;
 
-        if(!result!.Canceled){
+        if (!result!.Canceled)
+        {
             await HandleLogout();
         }
     }

@@ -25,7 +25,8 @@
 @import '03-components/nexo-drawer';
 
 // 04 - Features: Estilos por feature
-@import '04-features/auth';
+@import '04-features/login';
+@import '04-features/reset-password';
 @import '04-features/dashboard';
 @import '04-features/jobs';
 @import '04-features/account';

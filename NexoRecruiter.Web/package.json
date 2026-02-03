@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "sass:watch": "sass --watch wwwroot/styles/main.scss:wwwroot/styles/main.css --source-map",
+    "sass:build": "sass wwwroot/styles/main.scss:wwwroot/styles/main.css --style=compressed --no-source-map"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.23.0",
   "devDependencies": {
+    "sass": "^1.97.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   }

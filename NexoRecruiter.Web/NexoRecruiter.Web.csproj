@@ -7,7 +7,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DartSassBuilder" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -17,14 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- DartSassBuilder compilará estos archivos automáticamente -->
     <None Remove="wwwroot\styles\**\*.scss" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- dotnet watch monitoreará cambios en SCSS -->
-    <Watch Include="wwwroot\styles\**\*.scss" />
-    <Debug Include="wwwroot\styles\**\*.scss"/>
+    <Watch Include="wwwroot\styles\**\*.css" />
   </ItemGroup>
 
   <!-- 1. Excluir archivos TS del output -->

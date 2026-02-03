@@ -6,6 +6,14 @@
 .nexo-drawer {
     background-color: var(--mud-palette-drawer-background) !important;
     color: var(--mud-palette-drawer-text) !important;
+
+    &__content {
+        overflow-y: auto;
+    }
+
+    &__profile-info {
+        margin-top: 16px;
+    }
 }
 
 // Estado activo

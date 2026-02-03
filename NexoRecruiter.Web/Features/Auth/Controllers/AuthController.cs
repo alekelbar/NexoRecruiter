@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using NexoRecruiter.Application.Auth.DTOs;
+using NexoRecruiter.Application.DTOs.Auth;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Web.Features.Auth.Controllers
