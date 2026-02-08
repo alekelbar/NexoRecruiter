@@ -47,30 +47,23 @@
 
   <!-- Instalar node_modules si no existen -->
   <Target Name="RestoreNodeModules" BeforeTargets="BeforeBuild">
-    <Exec Command="pnpm install"
-      WorkingDirectory="$(ProjectDir)"
-      Condition="!Exists('$(ProjectDir)node_modules') And Exists('$(ProjectDir)package.json')" />
+    <Exec Command="pnpm install" WorkingDirectory="$(ProjectDir)" Condition="!Exists('$(ProjectDir)node_modules') And Exists('$(ProjectDir)package.json')" />
   </Target>
 
   <!-- Build TypeScript solo en Release -->
   <Target Name="BuildTypeScript" BeforeTargets="Build">
-    <Exec Command="pnpm run build"
-      WorkingDirectory="$(ProjectDir)"
-      Condition="'$(Configuration)' == 'Release' And Exists('$(ProjectDir)package.json')" />
+    <Exec Command="pnpm run build" WorkingDirectory="$(ProjectDir)" Condition="'$(Configuration)' == 'Release' And Exists('$(ProjectDir)package.json')" />
   </Target>
 
   <!-- Limpiar archivos generados -->
   <Target Name="CleanTypeScript" AfterTargets="Clean">
-    <RemoveDir Directories="$(ProjectDir)wwwroot\scripts\dist"
-      Condition="Exists('$(ProjectDir)wwwroot\scripts\dist')" />
+    <RemoveDir Directories="$(ProjectDir)wwwroot\scripts\dist" Condition="Exists('$(ProjectDir)wwwroot\scripts\dist')" />
   </Target>
 
   <!-- Validar que los bundles existen antes de publish -->
   <Target Name="ValidateAssets" BeforeTargets="Publish" Condition="'$(Configuration)' == 'Release'">
-    <Error Text="Bundle JS no encontrado. Ejecuta 'pnpm run build'" 
-           Condition="!Exists('$(ProjectDir)wwwroot\scripts\dist\app.bundle.js')" />
-    <Error Text="CSS compilado no encontrado" 
-           Condition="!Exists('$(ProjectDir)wwwroot\styles\main.css')" />
+    <Error Text="Bundle JS no encontrado. Ejecuta 'pnpm run build'" Condition="!Exists('$(ProjectDir)wwwroot\scripts\dist\app.bundle.js')" />
+    <Error Text="CSS compilado no encontrado" Condition="!Exists('$(ProjectDir)wwwroot\styles\main.css')" />
   </Target>
 
   <PropertyGroup>

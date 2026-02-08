@@ -658,7 +658,7 @@ pre {
   border: 1px solid blue;
 }
 
-.nexo-recovery-password {
+.nexo-reset-password {
   background-color: white;
   min-height: 100vh;
   display: flex;
@@ -666,20 +666,28 @@ pre {
   justify-content: center;
   align-items: center;
 }
-.nexo-recovery-password__login-card {
+.nexo-reset-password__login-card {
   max-width: 400px;
   width: 100%;
   padding: 16px;
 }
-.nexo-recovery-password__icon {
+.nexo-reset-password__icon {
   margin-bottom: 64px;
 }
-.nexo-recovery-password__input {
+.nexo-reset-password__input {
   width: 100%;
   margin-top: 8px;
 }
-.nexo-recovery-password__button-back {
+.nexo-reset-password__button-back {
   text-align: center;
+}
+.nexo-reset-password__text {
+  max-width: 65%;
+  margin: 0 auto;
+  text-align: center;
+}
+.nexo-reset-password__text-title {
+  font-weight: bold;
 }
 
 .dashboard-container {

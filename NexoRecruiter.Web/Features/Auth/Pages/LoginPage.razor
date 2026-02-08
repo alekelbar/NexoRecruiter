@@ -11,7 +11,7 @@
     string imageBG = $"{Assets["images/login-lateral.svg"]}";
 }
 
-<MudPaper Class="login-page-container" Spacing="0">
+<MudPaper Class="login-page-container">
     <MudCard Elevation="0" class="login-card">
 
         <MudImage Class="login-icon" Src="@Assets["images/logo-login.png"]"></MudImage>
@@ -30,7 +30,7 @@
             <div>
                 <MudStack Row Justify=Justify.SpaceBetween AlignItems=AlignItems.Center>
                     <MudText Class="login-card__label">Password</MudText>
-                    <MudLink Href="/external-password-recovery" Typo=Typo.caption>Forgot Password?</MudLink>
+                    <MudLink Href="/password-recovery" Typo=Typo.caption>Forgot Password?</MudLink>
                 </MudStack>
                 <MudTextField Class="login-form__input" @bind-Value="_password" Variant="Variant.Outlined"
                               InputType="@(ShowPassword? InputType.Text: InputType.Password)" Placeholder="●●●●●●●●●●●●●●"

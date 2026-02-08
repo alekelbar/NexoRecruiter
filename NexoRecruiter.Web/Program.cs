@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using NexoRecruiter.Domain.Services.Email.ValueObjects;
 using NexoRecruiter.Infrastructure;
 using NexoRecruiter.Infrastructure.Persistence;
 using NexoRecruiter.Web;
@@ -55,7 +56,6 @@ builder.Services.AddAuthorization(opt =>
         .Build();
 });
 
-builder.Services.AddInfraestructure();
 builder.Services.AddMudServices();
 
 builder.Services.AddHttpClient("ServerAPI", client =>
@@ -64,7 +64,11 @@ builder.Services.AddHttpClient("ServerAPI", client =>
 });
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+    options.TokenLifespan = TimeSpan.FromHours(24)
+); // Tokens de reset de contraseña expiran en 24 horas
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddInfraestructure();
 var app = builder.Build();
 
 await IdentitySeeder.SeedAsync(app.Services, app.Configuration);

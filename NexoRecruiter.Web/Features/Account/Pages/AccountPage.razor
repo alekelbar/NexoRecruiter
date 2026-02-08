@@ -14,8 +14,8 @@
         <MudItem xs="12">
             <MudCard Class="pa-4">
                 <MudGrid Justify="Justify.SpaceBetween" Spacing="8">
-                    <MudItem Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
-                        <MudStack Row>
+                    <MudItem>
+                        <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
                             <MudAvatar>@((CurrentUser?.FullName ?? CurrentUser?.NickName ?? "").FirstOrDefault())
                             </MudAvatar>
                         </MudStack>
