@@ -1,0 +1,14 @@
+.nexo-appbar {
+    .greet-text {
+        font-weight: 500;
+        display: none;
+    }
+}
+
+@media (min-width: 600px) {
+    .nexo-appbar {
+        .greet-text {
+            display: initial;
+        }
+    }
+}

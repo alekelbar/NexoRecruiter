@@ -7,6 +7,7 @@ using NexoRecruiter.Domain.Abstractions;
 using NexoRecruiter.Domain.interfaces.Auth;
 using NexoRecruiter.Domain.repositories;
 using NexoRecruiter.Domain.Repositories;
+using NexoRecruiter.Domain.Services.Auth;
 using NexoRecruiter.Infrastructure;
 using NexoRecruiter.Infrastructure.Persistence;
 using NexoRecruiter.Infrastructure.Services.Auth;
@@ -26,6 +27,9 @@ namespace NexoRecruiter.Infrastructure
 
             // Servicio de usuario
             services.AddTransient<INexoUserManager, NexoUserManager>();
+
+            // Servicio de autenticación
+            services.AddScoped<INexoAuthStateProvider, NexoAuthStateProvider>();
         }
     }
 }

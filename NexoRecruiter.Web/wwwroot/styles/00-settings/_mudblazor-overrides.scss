@@ -74,4 +74,14 @@
   --mud-button-text-primary-hover-background: rgba(41, 157, 145, 0.08) !important;
   --mud-typography-button-text-transform: none !important;
 
+  // MudPapers
+  --mud-default-borderradius: 4px !important;
+
+  // drawers
+  --mud-drawer-width-left: 280px !important;
+  --mud-drawer-width-right: 280px !important;
+
+  // appbar overrides
+  --mud-palette-appbar-background: #{$color-appbar-bg} !important;
+
 }

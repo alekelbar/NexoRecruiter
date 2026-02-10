@@ -10,6 +10,7 @@
 @import '00-settings/spacing';
 @import '00-settings/typography';
 @import '00-settings/breakpoints';
+@import '00-settings/global-variables';
 
 // 01 - Base: Resets y estilos base
 @import '01-base/reset';
@@ -23,6 +24,7 @@
 @import '03-components/buttons';
 @import '03-components/cards';
 @import '03-components/nexo-drawer';
+@import '03-components/appbar';
 
 // 04 - Features: Estilos por feature
 @import '04-features/login';
@@ -30,6 +32,7 @@
 @import '04-features/dashboard';
 @import '04-features/jobs';
 @import '04-features/account';
+@import '04-features/change_password';
 
 // 05 - Utilities: Clases de utilidad
 @import '05-utilities/spacing';

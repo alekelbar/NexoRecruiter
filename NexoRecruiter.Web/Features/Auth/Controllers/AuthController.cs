@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NexoRecruiter.Application.DTOs.Auth;
+using NexoRecruiter.Domain.Services.Auth;
+using NexoRecruiter.Infrastructure.Services.Auth;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Web.Features.Auth.Controllers
 {
     [Route("auth")]
-    public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
+    public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, INexoAuthStateProvider nexoAuthStateProvider) : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+        private readonly INexoAuthStateProvider nexoAuthStateProvider = nexoAuthStateProvider;
 
         [HttpPost("Login")]
         [ValidateAntiForgeryToken]
@@ -38,6 +41,8 @@ namespace NexoRecruiter.Web.Features.Auth.Controllers
             user.LastLoginAt = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
 
+            // Notify the authentication state provider about the change in authentication state
+            (nexoAuthStateProvider as NexoAuthStateProvider)?.NotifyAuthenticationStateChanged(HttpContext.User);
             return LocalRedirect(returnUrl);
         }
 
@@ -50,6 +55,8 @@ namespace NexoRecruiter.Web.Features.Auth.Controllers
             if (string.IsNullOrWhiteSpace(returnUrl) || !Url.IsLocalUrl(returnUrl))
                 return Redirect("/login");
 
+            // if the implementation change should notify the authentication state provider about the change in authentication state, this is not needed, but for safety we can do it here as well
+            (nexoAuthStateProvider as NexoAuthStateProvider)?.NotifyAuthenticationStateChanged(null);
             return LocalRedirect(returnUrl);
         }
 

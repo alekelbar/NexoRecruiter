@@ -1,13 +1,12 @@
+@using NexoRecruiter.Domain.Services.Auth.ValueObjects
 @using NexoRecruiter.Web.Features.Dashboard.Helpers
 @inject NavigationManager navigationManager
 
-<MudAppBar Color="Color.Transparent" Fixed Elevation="0">
-
+<MudAppBar Class="nexo-appbar" Color="Color.Default" Fixed Elevation="0">
     @if (isDashboard)
     {
-        <MudText Class="mr-1" Typo="Typo.body1">Hello @(CurrentUser?.FullName ?? "")</MudText>
+        <MudText Class="mr-1 greet-text" Typo="Typo.body1">Hello @(CurrentUser?.FullName ?? "")</MudText>
     }
-
     <MudIconButton OnClick="drawerController!.Toggle"
                    Icon="@(drawerController.IsOpen ? Icons.Material.Filled.KeyboardDoubleArrowLeft: Icons.Material.Filled.KeyboardDoubleArrowRight)"
                    aria-label="Open Drawer" />
@@ -17,9 +16,7 @@
 
 @code {
     [CascadingParameter(Name = "CurrentUser")]
-    public ApplicationUser? CurrentUser { get; set; }
-    [CascadingParameter(Name = "CurrentRoles")]
-    public string? CurrentRoles { get; set; }
+    public NexoUser? CurrentUser { get; set; }
     public bool isDashboard = false;
     [Parameter]
     public DrawerController? drawerController { get; set; }

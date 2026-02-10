@@ -5,15 +5,27 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using NexoRecruiter.Domain.Abstractions;
 using NexoRecruiter.Domain.interfaces.Auth;
+using NexoRecruiter.Domain.Services.Auth;
 using NexoRecruiter.Domain.Services.Auth.ValueObjects;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Infrastructure.Services.Auth
 {
-    public class NexoUserManager(UserManager<ApplicationUser> userManager, IEmailService emailService) : INexoUserManager
+    public class NexoUserManager(UserManager<ApplicationUser> userManager, IEmailService emailService, INexoAuthStateProvider nexoAuthStateProvider) : INexoUserManager
     {
         private readonly UserManager<ApplicationUser> userManager = userManager;
         private readonly IEmailService emailService = emailService;
+        private readonly INexoAuthStateProvider nexoAuthStateProvider = nexoAuthStateProvider;
+
+        public async Task<bool> ChangePasswordAsync(string userEmail, string currentPassword, string newPassword, CancellationToken ct = default)
+        {
+            var user = await userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+                return false;
+
+            var result = await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result.Succeeded;
+        }
 
         public string DecodedResetPasswordTokenAsync(string token, CancellationToken ct = default)
         {
@@ -89,6 +101,16 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
 
             // TODO: Se usa la expiración de 24 horas como ejemplo, pero esto debería ser configurable
             return new PasswordResetToken(tokenResult, email, DateTime.UtcNow.AddHours(24));
+        }
+
+        public async Task<bool> UpdateUserAsync(NexoUser user, CancellationToken ct = default)
+        {
+            var currentUser = await userManager.FindByIdAsync(user.Id);
+            if (currentUser == null)
+                return false;
+
+            var result = await userManager.UpdateAsync(currentUser);
+            return result.Succeeded;
         }
 
         public async Task<bool> ValidateAndConsumeResetTokenAsync(string email, string token, string newPassword, CancellationToken ct = default)

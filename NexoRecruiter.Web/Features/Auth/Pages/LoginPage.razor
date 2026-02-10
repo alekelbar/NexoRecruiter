@@ -2,8 +2,9 @@
 @attribute [AllowAnonymous]
 
 @using NexoRecruiter.Application.DTOs.Auth;
+@using NexoRecruiter.Domain.Services.Auth
 @inject NavigationManager _navigationManager
-@inject AuthenticationStateProvider _authenticationStateProvider
+@inject INexoAuthStateProvider _authenticationStateProvider
 @inject IJSRuntime JSRuntime
 @layout AuthLayout
 
@@ -140,7 +141,7 @@
         if (firstRender)
         {
             var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            if (authState.User.Identity?.IsAuthenticated == true)
+            if (authState.IsAuthenticated)
             {
                 _navigationManager.NavigateTo("/dashboard", replace: true);
             }

@@ -1,26 +1,8 @@
-.module-account-page {
+.nexo-account-page {
+    margin: 0 var(--nexo-dashboard-margins);
+    background-color: transparent;
 
-    &__icon-circle {
-        background-color: $color-primary;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .responsive-stack {
-        @media (max-width: 600px) {
-            .responsive-stack {
-                flex-direction: column;
-            }
-        }
-        
-        @media (min-width: 601px) {
-            .responsive-stack {
-                flex-direction: row;
-            }
-        }
+    &__text-title {
+        margin-bottom: var(--nexo-dashboard-title-margin-bottom);
     }
 }

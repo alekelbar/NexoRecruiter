@@ -322,7 +322,7 @@ template {
   --mud-palette-background: #F5F5F5 !important;
   --mud-palette-background-grey: #F5F5F5 !important;
   --mud-palette-surface: #FFFFFF !important;
-  --mud-palette-appbar-background: #000000 !important;
+  --mud-palette-appbar-background: #FFFFFF !important;
   --mud-palette-appbar-text: #191919 !important;
   --mud-palette-drawer-background: #191919 !important;
   --mud-palette-drawer-text: #FFFFFF !important;
@@ -352,8 +352,27 @@ template {
   --mud-button-outlined-primary-hover-background: rgba(41, 157, 145, 0.08) !important;
   --mud-button-text-primary-hover-background: rgba(41, 157, 145, 0.08) !important;
   --mud-typography-button-text-transform: none !important;
+  --mud-default-borderradius: 4px !important;
+  --mud-drawer-width-left: 280px !important;
+  --mud-drawer-width-right: 280px !important;
+  --mud-palette-appbar-background: #FFFFFF !important;
 }
 
+:root {
+  --nexo-dashboard-margins: 32px;
+  --nexo-dashboard-title-margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --nexo-dashboard-margins: 16px;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    --nexo-dashboard-margins: 8px;
+  }
+}
 *,
 *::before,
 *::after {
@@ -631,6 +650,21 @@ pre {
   color: var(--mud-palette-primary-text) !important;
 }
 
+.dashboard-sidebar__logo {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.nexo-appbar .greet-text {
+  font-weight: 500;
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .nexo-appbar .greet-text {
+    display: initial;
+  }
+}
 .login-page-container {
   background-color: white;
   min-height: 100vh;
@@ -645,7 +679,8 @@ pre {
   padding: 16px;
 }
 .login-page-container .login-card .login-icon {
-  margin-bottom: 64px;
+  width: fit-content;
+  margin: 32px auto;
 }
 .login-page-container .login-card .login-form__input {
   width: 100%;
@@ -673,6 +708,8 @@ pre {
 }
 .nexo-reset-password__icon {
   margin-bottom: 64px;
+  width: 276px;
+  margin: 32px auto;
 }
 .nexo-reset-password__input {
   width: 100%;
@@ -789,24 +826,33 @@ pre {
   color: #666666;
 }
 
-.module-account-page__icon-circle {
-  background-color: #299D91;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+.nexo-account-page {
+  margin: 0 var(--nexo-dashboard-margins);
+  background-color: transparent;
+}
+.nexo-account-page__text-title {
+  margin-bottom: var(--nexo-dashboard-title-margin-bottom);
+}
+
+.nexo-change-password {
+  margin: 0 var(--nexo-dashboard-margins);
+}
+.nexo-change-password__container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  padding: 24px 16px;
 }
-@media (max-width: 600px) {
-  .module-account-page .responsive-stack .responsive-stack {
-    flex-direction: column;
-  }
+.nexo-change-password__text-title {
+  margin-bottom: var(--nexo-dashboard-title-margin-bottom);
 }
-@media (min-width: 601px) {
-  .module-account-page .responsive-stack .responsive-stack {
-    flex-direction: row;
-  }
+.nexo-change-password__login-card {
+  max-width: fit-content;
+}
+.nexo-change-password__card-label {
+  margin-bottom: 8px;
 }
 
 .m-0 {

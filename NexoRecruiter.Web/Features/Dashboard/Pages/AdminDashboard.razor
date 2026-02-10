@@ -1,5 +1,6 @@
 @page "/dashboard";
 @using Microsoft.AspNetCore.Identity
+@using NexoRecruiter.Domain.Services.Auth.ValueObjects
 @using NexoRecruiter.Web.Features.Auth.Models
 @using NexoRecruiter.Web.Features.Dashboard.Helpers
 
@@ -12,10 +13,8 @@
 
 @code {
     [CascadingParameter(Name = "CurrentUser")]
-    public ApplicationUser? CurrentUser { get; set; }
-    [CascadingParameter(Name = "CurrentRoles")]
-    public string? CurrentRoles { get; set; }
-
+    public NexoUser? CurrentUser { get; set; }
+    
     [CascadingParameter(Name = "DashboardLayout")]
     public DashboardLayout? dashboardLayout { get; set; }
 

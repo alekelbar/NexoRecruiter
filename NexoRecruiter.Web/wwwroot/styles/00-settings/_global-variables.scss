@@ -1,0 +1,16 @@
+:root {
+    --nexo-dashboard-margins: 32px;
+    --nexo-dashboard-title-margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+    :root {
+        --nexo-dashboard-margins: 16px;
+    }
+}
+
+@media (max-width: 400px) {
+    :root {
+        --nexo-dashboard-margins: 8px;
+    }
+}

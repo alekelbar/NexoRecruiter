@@ -1,12 +1,12 @@
+@using NexoRecruiter.Domain.Services.Auth.ValueObjects
 @using NexoRecruiter.Web.Features.Dashboard.Helpers
 @inject IDialogService Dialog
 
-
-<MudDrawer Width="280px" Class="nexo-drawer p-4" Open="IsOpen" OpenChanged="Toggle" Anchor="Anchor.Start" Elevation="1"
+<MudDrawer Class="nexo-drawer p-4" Open="IsOpen" OpenChanged="Toggle" Anchor="Anchor.Start" Elevation="1"
            Variant="@DrawerVariant.Responsive">
     <MudDrawerHeader Class="dashboard-sidebar__header">
         <MudStack StretchItems="StretchItems.None">
-            <MudImage Class="dashboard-sidebar__logo" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
+            <MudImage Class="dashboard-sidebar__logo" Width="276" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
         </MudStack>
     </MudDrawerHeader>
     <MudElement HtmlTag="div" Class="nexo-drawer__content">
@@ -38,7 +38,7 @@
                 Evaluaciones IA
             </MudNavLink>
 
-            @if (CurrentRoles?.Contains("Admin") == true)
+            @if (CurrentUser?.Roles?.Contains("Admin") == true)
             {
                 <MudText Typo="Typo.caption" Class="mt-4">Administración</MudText>
 
@@ -84,10 +84,8 @@
 </form>
 
 @code {
-    [CascadingParameter(Name = "CurrentRoles")]
-    public string? CurrentRoles { get; set; }
     [CascadingParameter(Name = "CurrentUser")]
-    public ApplicationUser? CurrentUser { get; set; }
+    public NexoUser? CurrentUser { get; set; }
     [Parameter]
     public bool IsOpen { get; set; }
 
