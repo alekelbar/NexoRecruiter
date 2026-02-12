@@ -59,5 +59,19 @@ namespace NexoRecruiter.Domain.interfaces.Auth
         /// <param name="ct"></param>
         /// <returns></returns>
         Task<bool> UpdateUserAsync(NexoUser user, CancellationToken ct = default);
+
+        /// <summary>
+        /// Genera un token de confirmación de email para el usuario actual
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        Task<EmailConfirmationToken> RequestEmailConfirmationTokenAsync(CancellationToken ct = default);
+
+        /// <summary>/ Confirma el email de un usuario dado un token
+        /// </summary> <param name="userId"></param>
+        /// <param name="token"></param> <param name="ct"></param>
+        /// <returns></returns>
+        Task<bool> ConfirmEmailAsync(string userId, string token, CancellationToken ct = default);
     }
 }

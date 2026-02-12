@@ -1,4 +1,4 @@
-@page "/Account"
+@page "/auth/account"
 @using Microsoft.AspNetCore.Identity
 @using NexoRecruiter.Application.DTOs.Account
 @using NexoRecruiter.Domain.Services.Auth.ValueObjects
@@ -11,41 +11,16 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager navigationManager
 
-<MudPaper Elevation="0" Class="nexo-account-page">
+<MudContainer Class="nexo-account-page">
     <MudText Class="nexo-account-page__text-title" Typo="Typo.h5" Align="Align.Start" Color="Color.Secondary">
         Account Settings
     </MudText>
     <MudGrid>
         <MudItem xs="12">
-            <MudCard Class="pa-4">
-                <div @onkeydown="HandleKeyDown" @onkeydown:preventDefault="true">
-                    <MudGrid Justify="Justify.SpaceBetween" Spacing="8">
-                        <MudItem>
-                            <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="4">
-                                <MudAvatar>@AvatarInitial</MudAvatar>
-                            </MudStack>
-                        </MudItem>
-                        <MudItem>
-                            <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Wrap="Wrap.Wrap">
-                                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ToggleEdit"
-                                           EndIcon="@Icons.Material.Filled.Edit">
-                                    Edit
-                                </MudButton>
-                                <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="SaveChanges"
-                                           Disabled="@isNotEditable" EndIcon="@Icons.Material.Filled.Save">
-                                    Save
-                                </MudButton>
-                                <MudButton Color="Color.Secondary" Variant="Variant.Filled"
-                                           OnClick="GoToChangePassword">
-                                    Change Password
-                                </MudButton>
-                            </MudStack>
-                        </MudItem>
-                    </MudGrid>
-                </div>
+            <MudCard Class="pa-4 gap-4">
                 <MudGrid>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Nombre completo</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">FullName</MudText>
                         <MudTextField T="string" Disabled="@isNotEditable" Placeholder="Nombre completo"
                                       Variant="Variant.Filled" @bind-Value="userAccountDTO.FullName" />
                     </MudItem>
@@ -55,23 +30,40 @@
                                       Variant="Variant.Filled" @bind-Value="userAccountDTO.Nickname" OnBlur="ValidateNickname" />
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Puesto de Trabajo</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Job Title</MudText>
                         <MudTextField T="string" Disabled="@isNotEditable" Placeholder="Puesto" Variant="Variant.Filled"
                                       @bind-Value="userAccountDTO.JobTitle" />
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Fecha de creación</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Created at</MudText>
                         <MudTextField T="string" Value="@CreatedAtText" Variant="Variant.Filled" Disabled="true" />
                     </MudItem>
                     <MudItem xs="12" md="6">
-                        <MudText Typo="Typo.body1" Class="mt-4">Último acceso</MudText>
+                        <MudText Typo="Typo.body1" Class="mt-4">Last Login</MudText>
                         <MudTextField T="string" Value="@LastLoginText" Variant="Variant.Filled" Disabled="true" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Spacing="8" Justify="Justify.FlexStart" Class="mt-4">
+                    <MudItem xs="12" lg="8">
+                        <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center" Wrap="Wrap.Wrap">
+                            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ToggleEdit"
+                                       EndIcon="@Icons.Material.Filled.Edit">
+                                Edit
+                            </MudButton>
+                            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="SaveChanges"
+                                       Disabled="@isNotEditable" EndIcon="@Icons.Material.Filled.Save">
+                                Save
+                            </MudButton>
+                            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="GoToChangePassword">
+                                Change Password
+                            </MudButton>
+                        </MudStack>
                     </MudItem>
                 </MudGrid>
             </MudCard>
         </MudItem>
     </MudGrid>
-</MudPaper>
+</MudContainer>
 
 
 @code {
@@ -106,7 +98,7 @@
 
     public void GoToChangePassword()
     {
-        navigationManager.NavigateTo("/change-password");
+        navigationManager.NavigateTo(AppRoutes.ChangePassword);
     }
 
     private bool IsNicknameValid => !string.IsNullOrWhiteSpace(userAccountDTO.Nickname) &&
@@ -172,7 +164,7 @@
 
         if (dashboardLayout is not null)
         {
-            dashboardLayout.setCurrentPage("Account", path: "/Account");
+            dashboardLayout.setCurrentPage("Account", path: AppRoutes.Account);
         }
         return base.OnInitializedAsync();
     }
@@ -188,13 +180,5 @@
         if (timeSpan.TotalDays < 30) return date.ToString("dd 'de' MMM", new System.Globalization.CultureInfo("es-ES"));
 
         return date.ToString("dd/MM/yyyy");
-    }
-
-    private async Task HandleKeyDown(KeyboardEventArgs e)
-    {
-        if ((e.CtrlKey || e.MetaKey) && e.Key == "s")
-        {
-            await SaveChanges();
-        }
     }
 }

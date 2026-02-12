@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using NexoRecruiter.Domain.Abstractions;
+using NexoRecruiter.Domain.Helpers;
 using NexoRecruiter.Domain.interfaces.Auth;
 using NexoRecruiter.Domain.Services.Auth;
 using NexoRecruiter.Domain.Services.Auth.ValueObjects;
+using NexoRecruiter.Infrastructure.Helpers;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Infrastructure.Services.Auth
@@ -24,6 +26,22 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
                 return false;
 
             var result = await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ConfirmEmailAsync(string userId, string token, CancellationToken ct = default)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            var isAlreadyConfirmed = await userManager.IsEmailConfirmedAsync(user);
+            if (isAlreadyConfirmed) return true;
+
+            var tokenBytes = WebEncoders.Base64UrlDecode(token);
+            var decodedToken = Encoding.UTF8.GetString(tokenBytes);
+
+            var result = await userManager.ConfirmEmailAsync(user, decodedToken);
             return result.Succeeded;
         }
 
@@ -70,6 +88,41 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
             return result;
         }
 
+        public async Task<EmailConfirmationToken> RequestEmailConfirmationTokenAsync(CancellationToken ct = default)
+        {
+            var currentUser = await nexoAuthStateProvider.GetCurrentUserAsync() ?? throw new InvalidOperationException("User not authenticated or email mismatch");
+            var user = await userManager.FindByIdAsync(currentUser.Id) ?? throw new InvalidOperationException("User not found in database");
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var tokenEncoded = WebEncoders.Base64UrlEncode(tokenBytes);
+            var escapedUserId = Uri.EscapeDataString(currentUser.Id);
+
+            var confirmationLink = AppRoutes.ConfirmEmail(escapedUserId, tokenEncoded);
+            var emailBody = $@"
+                <h2>Email Confirmation Request</h2>
+                <p>Click the link below to confirm your email. This link expires in 24 hours.</p>
+                <a href='{confirmationLink}' style='padding: 10px 20px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 4px;'>
+                    Confirm Email
+                </a>
+                <p>If you didn't request this, ignore this email.</p>
+            ";
+
+            await emailService.SendAsync(
+                to: currentUser.Email ?? "",
+                subject: "Email Confirmation Request - NexoRecruiter",
+                htmlBody: emailBody,
+                ct: ct
+            );
+
+            return new EmailConfirmationToken()
+            {
+                Token = token,
+                Email = currentUser.Email ?? string.Empty,
+                Expiration = DateTime.UtcNow.AddHours(24) // TODO: Esto debería ser configurable, no hardcodeado
+            };
+        }
+
         public async Task<PasswordResetToken> RequestResetPasswordTokenAsync(string email, CancellationToken ct = default)
         {
             var user = await userManager.FindByEmailAsync(email) ??
@@ -79,8 +132,9 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
 
             var tokenBytes = Encoding.UTF8.GetBytes(tokenResult);
             var tokenEncoded = WebEncoders.Base64UrlEncode(tokenBytes);
+            var escapedEmail = Uri.EscapeDataString(email);
 
-            var resetLink = $"https://localhost:5110/reset-password?email={Uri.EscapeDataString(email)}&token={tokenEncoded}";
+            var resetLink = AppRoutes.ResetPassword(escapedEmail, tokenEncoded);
             // TODO: En producción, esto debería ser desde configuración, no hardcodeado
 
             var emailBody = $@"

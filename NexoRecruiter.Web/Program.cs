@@ -15,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContext<RecruiterDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("NexoRecruiterDatabase"));
@@ -35,8 +37,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/login";
-    options.AccessDeniedPath = "/login";
+    options.LoginPath = "/auth/login";
+    options.AccessDeniedPath = "/auth/login";
 
     // Expiración total
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
@@ -94,6 +96,7 @@ app.UseAntiforgery();
 
 // 4) Endpoints
 app.MapControllers();
+app.MapRazorPages();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

@@ -631,8 +631,18 @@ pre {
   background-color: var(--mud-palette-drawer-background) !important;
   color: var(--mud-palette-drawer-text) !important;
 }
+.nexo-drawer .sidebar__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nexo-drawer .sidebar__logo {
+  max-width: 126px;
+}
 .nexo-drawer__content {
   overflow-y: auto;
+  background-color: transparent;
+  color: inherit;
 }
 .nexo-drawer__profile-info {
   margin-top: 16px;
@@ -827,23 +837,19 @@ pre {
 }
 
 .nexo-account-page {
-  margin: 0 var(--nexo-dashboard-margins);
   background-color: transparent;
 }
 .nexo-account-page__text-title {
   margin-bottom: var(--nexo-dashboard-title-margin-bottom);
 }
 
-.nexo-change-password {
-  margin: 0 var(--nexo-dashboard-margins);
-}
 .nexo-change-password__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 600px;
-  padding: 24px 16px;
+  min-height: max-content;
+  padding: 24px 0;
 }
 .nexo-change-password__text-title {
   margin-bottom: var(--nexo-dashboard-title-margin-bottom);
@@ -853,6 +859,33 @@ pre {
 }
 .nexo-change-password__card-label {
   margin-bottom: 8px;
+}
+
+.nexo-confirm-email {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.nexo-confirm-email__card {
+  padding: 2rem;
+  max-width: max-content;
+  width: 100%;
+  text-align: center;
+}
+.nexo-confirm-email__logo {
+  width: 100%;
+  max-width: 126px;
+  height: auto;
+  margin: 1rem auto;
+}
+.nexo-confirm-email__progress {
+  margin: 16px auto;
+}
+.nexo-confirm-email__alert {
+  margin: 1rem 0;
+  width: 250px;
 }
 
 .m-0 {

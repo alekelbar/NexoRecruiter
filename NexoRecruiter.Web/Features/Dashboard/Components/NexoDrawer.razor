@@ -4,37 +4,38 @@
 
 <MudDrawer Class="nexo-drawer p-4" Open="IsOpen" OpenChanged="Toggle" Anchor="Anchor.Start" Elevation="1"
            Variant="@DrawerVariant.Responsive">
-    <MudDrawerHeader Class="dashboard-sidebar__header">
+    <MudDrawerHeader Class="sidebar__header">
         <MudStack StretchItems="StretchItems.None">
-            <MudImage Class="dashboard-sidebar__logo" Width="276" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
+            <MudImage Class="sidebar__logo" Width="276" Src="@Assets[key: "images/Finebank.IO.png"]"></MudImage>
         </MudStack>
     </MudDrawerHeader>
-    <MudElement HtmlTag="div" Class="nexo-drawer__content">
-
+    <MudPaper Elevation="0" Class="nexo-drawer__content">
         <MudNavMenu>
             <MudText Typo="Typo.caption" Class="mt-4">General</MudText>
 
-            <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
+            <MudNavLink Href="@AppRoutes.Dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">
                 Dashboard
             </MudNavLink>
 
             <MudText Typo="Typo.caption" Class="mt-4">Reclutamiento</MudText>
 
-            <MudNavLink Href="/jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.WorkOutline">
+            <MudNavLink Href="@AppRoutes.Jobs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Work">
                 Vacantes
             </MudNavLink>
 
-            <MudNavLink Href="/applications" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AssignmentInd">
+            <MudNavLink Href="@AppRoutes.Applications" Match="NavLinkMatch.Prefix"
+                        Icon="@Icons.Material.Filled.CheckCircle">
                 Aplicaciones
             </MudNavLink>
 
-            <MudNavLink Href="/candidates" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">
+            <MudNavLink Href="@AppRoutes.Candidates" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Groups">
                 Candidatos
             </MudNavLink>
 
             <MudText Typo="Typo.caption" Class="mt-4">IA</MudText>
 
-            <MudNavLink Href="/ai-evaluations" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Psychology">
+            <MudNavLink Href="@AppRoutes.AIEvaluations" Match="NavLinkMatch.Prefix"
+                        Icon="@Icons.Material.Filled.AutoAwesome">
                 Evaluaciones IA
             </MudNavLink>
 
@@ -42,30 +43,33 @@
             {
                 <MudText Typo="Typo.caption" Class="mt-4">Administración</MudText>
 
-                <MudNavLink Href="/admin/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">
+                <MudNavLink Href="@AppRoutes.Users" Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.SupervisorAccount">
                     Usuarios
                 </MudNavLink>
 
-                <MudNavLink Href="/admin/settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
+                <MudNavLink Href="@AppRoutes.Settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Tune">
                     Configuración
                 </MudNavLink>
             }
 
             <MudText Typo="Typo.caption" Class="mt-4">Público</MudText>
 
-            <MudNavLink Href="/careers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">
+            @* El portal del empleo es el root de la aplicación, siempre es la cara visible y donde se coloca el
+            dominio, por eso es / *@
+            <MudNavLink Href="@AppRoutes.PublicPortal" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Language">
                 Portal de empleo
             </MudNavLink>
         </MudNavMenu>
-    </MudElement>
+    </MudPaper>
 
     <MudSpacer />
 
     <MudStack Class="nexo-drawer__profile-info" Row>
         <MudAvatar>@((CurrentUser?.FullName ?? CurrentUser?.NickName ?? "").FirstOrDefault())</MudAvatar>
         <MudStack Spacing="0">
-            <MudText Typo=Typo.body1>Alexander Barquero</MudText>
-            <MudLink Href="/Account" Color=Color.Inherit>
+            <MudText Typo=Typo.body1>@(CurrentUser?.FullName ?? CurrentUser?.NickName ?? "")</MudText>
+            <MudLink Href="@AppRoutes.Account" Color=Color.Inherit>
                 <MudText Typo=Typo.caption>Ver perfil</MudText>
             </MudLink>
         </MudStack>
@@ -78,9 +82,9 @@
     </MudButton>
 </MudDrawer>
 
-<form @ref="logoutForm" method="post" action="/auth/logout" id="logout-form" style="display: none;">
+<form @ref="logoutForm" method="post" action="@AppRoutes.ApiLogout" id="logout-form" style="display: none;">
     <AntiforgeryToken />
-    <input type="hidden" name="returnUrl" value="/login" />
+    <input type="hidden" name="returnUrl" value="@AppRoutes.Login" />
 </form>
 
 @code {

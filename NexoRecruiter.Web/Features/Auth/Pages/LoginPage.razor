@@ -1,4 +1,4 @@
-@page "/login"
+@page "/auth/login"
 @attribute [AllowAnonymous]
 
 @using NexoRecruiter.Application.DTOs.Auth;
@@ -13,13 +13,12 @@
 }
 
 <MudPaper Class="login-page-container">
-    <MudCard Elevation="0" class="login-card">
+    <MudContainer Elevation="0" class="login-card">
 
         <MudImage Class="login-icon" Src="@Assets["images/logo-login.png"]"></MudImage>
-        <MudElement HtmlTag="form" id="loginForm" method="post" action="/auth/login" class="d-flex flex-column gap-5"
+        <MudElement HtmlTag="form" id="loginForm" method="post" action="@AppRoutes.ApiLogin" class="d-flex flex-column gap-5"
                     @onsubmit="ValidateBeforeSubmit">
             <AntiforgeryToken />
-
             <div>
                 <MudText Class="login-card__label">Email</MudText>
                 <MudTextField Class="login-form__input" @bind-Value="_email" Variant="Variant.Outlined"
@@ -29,15 +28,24 @@
             </div>
 
             <div>
-                <MudStack Row Justify=Justify.SpaceBetween AlignItems=AlignItems.Center>
+                <MudStack Row
+                          Justify=Justify.SpaceBetween
+                          AlignItems=AlignItems.Center>
                     <MudText Class="login-card__label">Password</MudText>
-                    <MudLink Href="/password-recovery" Typo=Typo.caption>Forgot Password?</MudLink>
+                    <MudLink Href="@AppRoutes.RequestResetPassword" Typo=Typo.caption>Forgot Password?</MudLink>
                 </MudStack>
-                <MudTextField Class="login-form__input" @bind-Value="_password" Variant="Variant.Outlined"
-                              InputType="@(ShowPassword? InputType.Text: InputType.Password)" Placeholder="●●●●●●●●●●●●●●"
-                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.RemoveRedEye"
-                              AdornmentColor="Color.Primary" OnAdornmentClick="ShowPasswordField" id="passwordField"
-                              Error="@_passwordError" ErrorText="@_passwordErrorText" />
+                <MudTextField Class="login-form__input"
+                              @bind-Value="_password"
+                              Variant="Variant.Outlined"
+                              InputType="@(ShowPassword? InputType.Text: InputType.Password)"
+                              Placeholder="●●●●●●●●●●●●●●"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.RemoveRedEye"
+                              AdornmentColor="Color.Primary"
+                              OnAdornmentClick="ShowPasswordField"
+                              id="passwordField"
+                              Error="@_passwordError"
+                              ErrorText="@_passwordErrorText" />
                 <input type="hidden" name="password" value="@_password" />
             </div>
 
@@ -54,7 +62,7 @@
                 <MudAlert Variant="Variant.Filled" Severity="Severity.Error">@_errorMessage</MudAlert>
             }
         </MudElement>
-    </MudCard>
+    </MudContainer>
 </MudPaper>
 
 @code {
@@ -70,7 +78,7 @@
 
     [SupplyParameterFromQuery]
     [Parameter]
-    public string ReturnUrl { get; set; } = "/dashboard";
+    public string ReturnUrl { get; set; } =AppRoutes.Dashboard;
 
     [SupplyParameterFromQuery]
     public string? Error { get; set; }
@@ -143,7 +151,7 @@
             var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
             if (authState.IsAuthenticated)
             {
-                _navigationManager.NavigateTo("/dashboard", replace: true);
+                _navigationManager.NavigateTo(AppRoutes.Dashboard, replace: true);
             }
         }
     }

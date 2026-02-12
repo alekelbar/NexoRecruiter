@@ -9,7 +9,7 @@ namespace NexoRecruiter.Infrastructure.Helpers
 {
     public class NexoUserHelper
     {
-       public static ApplicationUser MapToApplicationUser(NexoUser nexoUser)
+        public static ApplicationUser MapToApplicationUser(NexoUser nexoUser)
         {
             return new ApplicationUser
             {
@@ -20,11 +20,12 @@ namespace NexoRecruiter.Infrastructure.Helpers
                 IsActive = nexoUser.IsActive,
                 JobTitle = nexoUser.JobTitle,
                 LastLoginAt = nexoUser.LastLoginAt,
-                NickName = nexoUser.NickName
+                NickName = nexoUser.NickName,
+                EmailConfirmed = nexoUser.EmailConfirmed
             };
         }
 
-        public static NexoUser MapFromApplicationUser(ApplicationUser appUser)
+        public static NexoUser MapFromApplicationUser(ApplicationUser appUser, IList<string>? roles = null)
         {
             return new NexoUser
             {
@@ -35,8 +36,10 @@ namespace NexoRecruiter.Infrastructure.Helpers
                 IsActive = appUser.IsActive,
                 JobTitle = appUser.JobTitle,
                 LastLoginAt = appUser.LastLoginAt,
-                NickName = appUser.NickName
+                NickName = appUser.NickName,
+                EmailConfirmed = appUser.EmailConfirmed,
+                Roles = roles?.ToList() ?? []
             };
-        } 
+        }
     }
 }

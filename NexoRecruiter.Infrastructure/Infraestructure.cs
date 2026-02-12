@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NexoRecruiter.Domain.Abstractions;
 using NexoRecruiter.Domain.interfaces.Auth;
-using NexoRecruiter.Domain.repositories;
 using NexoRecruiter.Domain.Repositories;
 using NexoRecruiter.Domain.Services.Auth;
 using NexoRecruiter.Infrastructure;

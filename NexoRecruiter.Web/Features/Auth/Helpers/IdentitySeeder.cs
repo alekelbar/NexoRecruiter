@@ -56,7 +56,8 @@ namespace NexoRecruiter.Web.Features.Auth.Helpers
                         JobTitle = adminJobTitle,
                         LastLoginAt = DateTime.UtcNow,
                         CreatedAt = DateTime.UtcNow,
-                        NickName = "ADMIN"
+                        NickName = "ADMIN",
+                        EmailConfirmed = false
                     };
 
                     var adminUserCreation = await userManager.CreateAsync(adminUser, adminPassword);

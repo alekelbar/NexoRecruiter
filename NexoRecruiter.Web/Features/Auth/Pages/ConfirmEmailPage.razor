@@ -1,0 +1,87 @@
+@page "/auth/confirm-email"
+@using NexoRecruiter.Domain.Services.Auth
+@using NexoRecruiter.Domain.interfaces.Auth
+@using System.Threading.Tasks
+@inject NavigationManager NavigationManager
+@inject INexoAuthStateProvider AuthService
+@inject INexoUserManager UserManager
+@inject ISnackbar SnackbarService
+
+<MudContainer Class="nexo-confirm-email">
+    <MudCard Class="nexo-confirm-email__card">
+        <MudImage Class="nexo-confirm-email__logo" Src="@Assets["images/logo-login.png"]"></MudImage>
+        @if (isLoading)
+        {
+            <MudProgressCircular Class="nexo-confirm-email__progress" Color="Color.Default" Size="Size.Large"
+                                 Indeterminate="true">
+                <ChildContent>
+                    Confirming your email...
+                </ChildContent>
+            </MudProgressCircular>
+        }
+        else if (isInvalidToken)
+        {
+            <MudText Class="nexo-confirm-email__alert" Color="Color.Error" Align="Align.Center">
+                The email confirmation link is invalid or has expired. Please request a new confirmation email.
+            </MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleNavigation">
+                Go to dashboard
+            </MudButton>
+        }
+        else if (isEmailConfirmed)
+        {
+            <MudText Class="nexo-confirm-email__alert" Color="Color.Success" Align="Align.Center">
+                Your email has been confirmed successfully! You can now access your dashboard and start using Nexo
+                Recruiter.
+            </MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleNavigation">
+                Go to dashboard
+            </MudButton>
+        }
+    </MudCard>
+</MudContainer>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string UserId { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    public string Token { get; set; } = default!;
+    public bool isLoading = true;
+    public bool isInvalidToken = false;
+    public bool isEmailConfirmed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(Token))
+        {
+            (isInvalidToken, isEmailConfirmed, isLoading) = (true, false, false);
+            return;
+        }
+
+        var result = await UserManager.ConfirmEmailAsync(UserId, Token);
+        if (result)
+        {
+            (isInvalidToken, isEmailConfirmed, isLoading) = (false, true, false);
+            SnackbarService.Add("Email confirmed successfully!", Severity.Success);
+        }
+        else
+        {
+            (isInvalidToken, isEmailConfirmed, isLoading) = (true, false, false);
+        }
+    }
+    public async Task HandleNavigation()
+    {
+        var authState = await AuthService.GetAuthenticationStateAsync();
+        if (authState.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo(AppRoutes.Dashboard);
+            return;
+        }
+        else
+        {
+            NavigationManager.NavigateTo(AppRoutes.Login);
+            return;
+        }
+    }
+}

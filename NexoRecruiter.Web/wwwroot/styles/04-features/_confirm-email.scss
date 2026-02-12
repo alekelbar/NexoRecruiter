@@ -1,0 +1,30 @@
+.nexo-confirm-email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+
+    &__card {
+        padding: 2rem;
+        max-width: max-content;
+        width: 100%;
+        text-align: center;
+    }
+
+    &__logo {
+        width: 100%;
+        max-width: 126px;
+        height: auto;
+        margin: 1rem auto;
+    }
+
+    &__progress {
+        margin: 16px auto;
+    }
+
+    &__alert {
+        margin: 1rem 0;
+        width: 250px;
+    }
+}

@@ -10,6 +10,7 @@ namespace NexoRecruiter.Domain.Services.Auth.ValueObjects
         public string Id { get; set; } = default!;
         public string FullName { get; set; } = default!;
         public string? Email { get; set; } = default!;
+        public bool EmailConfirmed { get; set; } = false;
         public string NickName { get; set; } = default!;
         public string? JobTitle { get; set; }
         public bool IsActive { get; set; } = false;

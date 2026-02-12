@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using NexoRecruiter.Web.Features.Auth.Models;
 using System.Security.Claims;
+using NexoRecruiter.Infrastructure.Helpers;
 
 namespace NexoRecruiter.Infrastructure.Services.Auth
 {
@@ -26,7 +27,7 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
             if (user == null)
                 return null;
 
-            return MapToNexoUser(user, await userManager.GetRolesAsync(user));
+            return NexoUserHelper.MapFromApplicationUser(user, roles: await userManager.GetRolesAsync(user));
         }
 
         public void NotifyAuthenticationStateChanged(ClaimsPrincipal? user)
@@ -36,22 +37,6 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
                 User = user,
                 ChangedAt = DateTime.UtcNow
             });
-        }
-
-        private static NexoUser MapToNexoUser(ApplicationUser user, IEnumerable<string> roles)
-        {
-            return new NexoUser
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FullName = user.FullName,
-                CreatedAt = user.CreatedAt,
-                IsActive = user.IsActive,
-                JobTitle = user.JobTitle,
-                LastLoginAt = user.LastLoginAt,
-                NickName = user.NickName,
-                Roles = [.. roles]
-            };
         }
 
         public async Task<NexoAuthenticationState> GetAuthenticationStateAsync()
@@ -64,7 +49,7 @@ namespace NexoRecruiter.Infrastructure.Services.Auth
 
             var user = await userManager.GetUserAsync(claimsPrincipal);
 
-            return new NexoAuthenticationState { User = MapToNexoUser(user!, await userManager.GetRolesAsync(user!)) };
+            return new NexoAuthenticationState { User = NexoUserHelper.MapFromApplicationUser(user!, await userManager.GetRolesAsync(user!)) };
         }
     }
 }
