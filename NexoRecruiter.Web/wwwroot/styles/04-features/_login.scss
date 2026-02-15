@@ -14,6 +14,16 @@
     width: 100%;
     padding: 16px;
 
+    &__title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    &__subtitle {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
     .login-icon {
       width: fit-content;
       margin: 32px auto;

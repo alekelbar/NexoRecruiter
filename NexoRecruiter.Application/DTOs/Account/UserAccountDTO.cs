@@ -8,10 +8,6 @@ namespace NexoRecruiter.Application.DTOs.Account
 
         [Required(ErrorMessage = "El nombre completo es obligatorio.")]
         public string FullName { get; set; } = default!;
-
-        [Required(ErrorMessage = "El nickname es obligatorio.")]
-        [RegularExpression(@"^\S*$", ErrorMessage = "El nickname no puede contener espacios.")]
-        public string Nickname { get; set; } = default!;
         public DateTime? CreatedAt { get; set; }
         public string JobTitle { get; set; } = default!;
         public DateTime? LastLoginAt { get; set; }

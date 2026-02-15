@@ -5,7 +5,6 @@ namespace NexoRecruiter.Web.Features.Auth.Models
     public class ApplicationUser : IdentityUser
     {
         public string FullName { get; set; } = default!;
-        public string NickName { get; set; } = default!;
         public string? JobTitle { get; set; }
         public bool IsActive { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

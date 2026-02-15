@@ -635,6 +635,7 @@ pre {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .nexo-drawer .sidebar__logo {
   max-width: 126px;
@@ -687,6 +688,14 @@ pre {
   max-width: 400px;
   width: 100%;
   padding: 16px;
+}
+.login-page-container .login-card__title {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.login-page-container .login-card__subtitle {
+  text-align: center;
+  margin-bottom: 24px;
 }
 .login-page-container .login-card .login-icon {
   width: fit-content;

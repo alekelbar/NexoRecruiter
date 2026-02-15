@@ -1,0 +1,39 @@
+@page "/auth/confirm-email"
+@using System.Threading.Tasks
+@using NexoRecruiter.Application.Services.Auth
+@using NexoRecruiter.Application.Services.Session
+@using NexoRecruiter.Domain.Repositories.Auth
+
+<MudContainer Class="nexo-confirm-email">
+    <MudCard Class="nexo-confirm-email__card">
+        <MudImage Class="nexo-confirm-email__logo" Src="@Assets["images/logo-login.png"]"></MudImage>
+        @if (isLoading)
+        {
+            <MudProgressCircular Class="nexo-confirm-email__progress" Color="Color.Default" Size="Size.Large"
+                                 Indeterminate="true">
+                <ChildContent>
+                    Confirming your email...
+                </ChildContent>
+            </MudProgressCircular>
+        }
+        else if (isInvalidToken)
+        {
+            <MudText Class="nexo-confirm-email__alert" Color="Color.Error" Align="Align.Center">
+                The email confirmation link is invalid or has expired. Please request a new confirmation email.
+            </MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleNavigation">
+                Go to dashboard
+            </MudButton>
+        }
+        else if (isEmailConfirmed)
+        {
+            <MudText Class="nexo-confirm-email__alert" Color="Color.Success" Align="Align.Center">
+                Your email has been confirmed successfully! You can now access your dashboard and start using Nexo
+                Recruiter.
+            </MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleNavigation">
+                Go to dashboard
+            </MudButton>
+        }
+    </MudCard>
+</MudContainer>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using NexoRecruiter.Domain.Helpers;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Web.Features.Auth.Helpers
@@ -20,7 +21,7 @@ namespace NexoRecruiter.Web.Features.Auth.Helpers
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            var roles = new string[] { "Admin", "Recruiter" };
+            var roles = new string[] { AppRoles.Admin, AppRoles.Recruiter };
 
             foreach (var role in roles)
             {
@@ -56,8 +57,7 @@ namespace NexoRecruiter.Web.Features.Auth.Helpers
                         JobTitle = adminJobTitle,
                         LastLoginAt = DateTime.UtcNow,
                         CreatedAt = DateTime.UtcNow,
-                        NickName = "ADMIN",
-                        EmailConfirmed = false
+                        EmailConfirmed = true
                     };
 
                     var adminUserCreation = await userManager.CreateAsync(adminUser, adminPassword);
@@ -79,9 +79,9 @@ namespace NexoRecruiter.Web.Features.Auth.Helpers
                     }
                 }
 
-                if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+                if (!await userManager.IsInRoleAsync(adminUser, AppRoles.Admin))
                 {
-                    var addRoleOperation = await userManager.AddToRoleAsync(adminUser, "Admin");
+                    var addRoleOperation = await userManager.AddToRoleAsync(adminUser, AppRoles.Admin);
                     if (!addRoleOperation.Succeeded)
                     {
                         var errors = string.Join(", ", addRoleOperation.Errors.Select(e => e.Description));

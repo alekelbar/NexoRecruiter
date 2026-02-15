@@ -14,5 +14,8 @@ namespace NexoRecruiter.Application.DTOs.Auth
         [Required(ErrorMessage = "Confirm password is required")]
         [Compare("NewPassword", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; } = string.Empty;
     }
 }

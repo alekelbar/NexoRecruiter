@@ -1,0 +1,59 @@
+@page "/auth/login"
+@attribute [AllowAnonymous]
+
+@using NexoRecruiter.Application.DTOs.Auth;
+@using NexoRecruiter.Application.Services.Session
+@using NexoRecruiter.Domain.Repositories.Auth
+@using NexoRecruiter.Web.Features.Auth.Layouts.AuthLayout
+@layout AuthLayout
+
+<MudPaper Class="login-page-container">
+    <MudContainer class="login-card">
+        <MudText Typo="Typo.h3" Class="login-card__title">Nexo Recruiter</MudText>
+        <MudText Typo="Typo.body2" Class="login-card__subtitle">Please enter your credentials to sign in</MudText>
+        <MudElement HtmlTag="form" id="loginForm" method="post" action="@AppRoutes.ApiLogin" class="d-flex flex-column gap-5"
+                    @onsubmit="ValidateBeforeSubmit">
+            <AntiforgeryToken />
+            <div>
+                <MudText Class="login-card__label">Email</MudText>
+                <MudTextField Class="login-form__input" @bind-Value="_email" Variant="Variant.Outlined"
+                              Placeholder="JonhDoe@gmail.com" InputType="InputType.Email" id="emailField" Error="@_emailError"
+                              ErrorText="@_emailErrorText" />
+                <input type="hidden" name="email" value="@_email" />
+            </div>
+
+            <div>
+                <MudStack Row
+                          Justify="Justify.SpaceBetween"
+                          AlignItems="AlignItems.Center">
+                    <MudText Class="login-card__label">Password</MudText>
+                    <MudLink Href="@AppRoutes.RequestResetPassword" Typo="Typo.caption">Forgot Password?</MudLink>
+                </MudStack>
+                <MudTextField Class="login-form__input"
+                              @bind-Value="_password"
+                              Variant="Variant.Outlined"
+                              InputType="@(ShowPassword? InputType.Text: InputType.Password)"
+                              Placeholder="●●●●●●●●●●●●●●"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.RemoveRedEye"
+                              AdornmentColor="Color.Primary"
+                              OnAdornmentClick="ShowPasswordField"
+                              id="passwordField"
+                              Error="@_passwordError"
+                              ErrorText="@_passwordErrorText" />
+                <input type="hidden" name="password" value="@_password" />
+            </div>
+
+            <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+            <MudButton Class="btn-signup" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                Login
+            </MudButton>
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Variant="Variant.Filled" Severity="Severity.Error">@_errorMessage</MudAlert>
+            }
+        </MudElement>
+    </MudContainer>
+</MudPaper>

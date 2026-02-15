@@ -1,0 +1,50 @@
+@page "/dashboard/users"
+@layout DashboardLayout
+@using System.Net.Http.Json
+@using Microsoft.Net.Http.Headers
+@using NexoRecruiter.Domain.Repositories.Auth
+@using NexoRecruiter.Domain.Repositories.Auth.ValueObjects
+@using NexoRecruiter.Web.Features.Dashboard.Helpers
+@using NexoRecruiter.Web.Features.Dashboard.Layouts
+@using NexoRecruiter.Web.Features.Dashboard.Layouts.DashboardLayout
+@using NexoRecruiter.Web.Features.Users.components
+
+@attribute [Authorize(Roles = AppRoles.Admin)]
+
+<MudContainer>
+    <MudText Typo="Typo.h6" Class="mb-4">Users</MudText>
+    <MudPaper Elevation="0" Class="p-4">
+        <MudDataGrid Elevation="0" Items="@Items" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <Columns>
+                <PropertyColumn Property="x => x.Email" Title="Email" />
+                <PropertyColumn Property="x => x.FullName" Title="Full Name" />
+                <PropertyColumn Property="x => x.JobTitle" Title="Job Title" />
+                <PropertyColumn Property="x => x.CreatedAt" Title="Created At" />
+                <TemplateColumn Title="Actions">
+                    <CellTemplate>
+                        <MudStack Row Spacing="1">
+                            <MudButton Disabled="IsTheSameUser(context.Item)" Variant="Variant.Filled"
+                                       Color="Color.Primary" Size="Size.Small">Edit</MudButton>
+                            <MudButton OnClick="() => OnDeleteUser(context.Item)" Variant="Variant.Outlined"
+                                       Color="Color.Error" Size="Size.Small">Delete
+                            </MudButton>
+                            <MudButton OnClick="() => RequestResetPassword(context.Item)" Variant="Variant.Outlined"
+                                       Color="Color.Primary" Size="Size.Small">Reset
+                                Password
+                            </MudButton>
+                            <MudButton Disabled="context.Item.EmailConfirmed"
+                                       OnClick="() => RequestEmailVerification(context.Item)" Variant="Variant.Outlined"
+                                       Color="Color.Primary" Size="Size.Small">Request Email
+                                Verification
+                            </MudButton>
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+        <MudStack Class="mt-4" Row Spacing="2" Justify="Justify.FlexEnd">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="OnCreateUser">Add User
+            </MudButton>
+        </MudStack>
+    </MudPaper>
+</MudContainer>

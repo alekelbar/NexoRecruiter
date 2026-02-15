@@ -4,21 +4,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NexoRecruiter.Application.DTOs.Auth;
+using NexoRecruiter.Application.Services.Session;
 using NexoRecruiter.Domain.Helpers;
-using NexoRecruiter.Domain.Services.Auth;
-using NexoRecruiter.Infrastructure.Services.Auth;
 using NexoRecruiter.Web.Features.Auth.Models;
 
 namespace NexoRecruiter.Web.Features.Auth.Controllers
 {
     [Route("auth-controller")]
-    public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, INexoAuthStateProvider nexoAuthStateProvider) : Controller
+    public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ISessionService sessionService) : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-        private readonly INexoAuthStateProvider nexoAuthStateProvider = nexoAuthStateProvider;
-
-        // TODO: migrar toda esta lógica a un servicio dedicado, el controller solo debería ser un thin layer que recibe la request, la manda al servicio y devuelve la response, toda la lógica de autenticación debería estar en el servicio, no en el controller
+        private readonly ISessionService _sessionService = sessionService;
 
         [HttpPost("Login")]
         [ValidateAntiForgeryToken]
@@ -35,17 +32,23 @@ namespace NexoRecruiter.Web.Features.Auth.Controllers
 
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user is null)
-                return Redirect($"{AppRoutes.Login}?error=1");
+                return Redirect($"{AppRoutes.Login}?error={AppLoginResults.UserNotFound}");
+
+            if (!user.EmailConfirmed)
+                return Redirect($"{AppRoutes.Login}?error={AppLoginResults.EmailNotConfirmed}");
+
+            if (!user.IsActive)
+                return Redirect($"{AppRoutes.Login}?error={AppLoginResults.InactiveAccount}");
 
             var signInResult = await _signInManager.PasswordSignInAsync(user!, dto.Password, true, false);
             if (!signInResult.Succeeded)
-                return Redirect($"{AppRoutes.Login}?error=2");
+                return Redirect($"{AppRoutes.Login}?error={AppLoginResults.InvalidPassword}");
 
             user.LastLoginAt = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
 
-            // Notify the authentication state provider about the change in authentication state
-            (nexoAuthStateProvider as NexoAuthStateProvider)?.NotifyAuthenticationStateChanged(HttpContext.User);
+            if (_sessionService is SessionService sessionServiceImpl)
+                await sessionServiceImpl.NotifyAuthenticationStateChangedAsync(HttpContext.User);
             return LocalRedirect(returnUrl);
         }
 
@@ -58,8 +61,8 @@ namespace NexoRecruiter.Web.Features.Auth.Controllers
             if (string.IsNullOrWhiteSpace(returnUrl) || !Url.IsLocalUrl(returnUrl))
                 return Redirect(AppRoutes.Login);
 
-            // if the implementation change should notify the authentication state provider about the change in authentication state, this is not needed, but for safety we can do it here as well
-            (nexoAuthStateProvider as NexoAuthStateProvider)?.NotifyAuthenticationStateChanged(null);
+            if (_sessionService is SessionService sessionServiceImpl)
+                await sessionServiceImpl.NotifyAuthenticationStateChangedAsync(null);
             return LocalRedirect(returnUrl);
         }
 

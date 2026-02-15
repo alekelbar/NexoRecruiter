@@ -1,0 +1,36 @@
+@using NexoRecruiter.Application.DTOs.Users
+@using NexoRecruiter.Application.Services.Auth
+@using NexoRecruiter.Web.Features.Users.components.ViewModels
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Add User</MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm Model="@newUser" OnValidSubmit="HandleValidSubmit">
+            <MudStack Spacing="2">
+                <DataAnnotationsValidator />
+
+                <MudSelect Placeholder="Select a role" Variant="Variant.Text" T="string" Label="Select a Role"
+                        Error="@(!newUser.SelectedRoles.Any())" ErrorText="Please select at least one role"
+                        MultiSelection="true" SelectedValues="newUser.SelectedRoles" SelectedValuesChanged="OnSelectRole">
+                    @foreach (var role in AppRoles.AllRoles)
+                    {
+                        <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudTextField @bind-Value="newUser.Email" Variant="Variant.Text" For="@(() => newUser.Email)"
+                            Label="Email" />
+                <MudTextField @bind-Value="newUser.FullName" Variant="Variant.Text" For="@(() => newUser.FullName)"
+                            Label="Full Name" />
+                <MudTextField @bind-Value="newUser.JobTitle" Variant="Variant.Text" For="@(() => newUser.JobTitle)"
+                            Label="Job Title" />
+
+                <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-4">
+                    <MudButton OnClick="Cancel">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</MudButton>
+                </MudStack>
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+</MudDialog>

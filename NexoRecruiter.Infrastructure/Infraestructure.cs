@@ -3,32 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using NexoRecruiter.Domain.Abstractions;
-using NexoRecruiter.Domain.interfaces.Auth;
+using NexoRecruiter.Domain.Repositories.Auth;
 using NexoRecruiter.Domain.Repositories;
-using NexoRecruiter.Domain.Services.Auth;
 using NexoRecruiter.Infrastructure;
 using NexoRecruiter.Infrastructure.Persistence;
-using NexoRecruiter.Infrastructure.Services.Auth;
-using NexoRecruiter.Infrastructure.Services.Email;
+using NexoRecruiter.Infrastructure.Repositories.Auth;
+using NexoRecruiter.Domain.Integrations.Email;
+using NexoRecruiter.Infrastructure.Integrations.Email;
 
 namespace NexoRecruiter.Infrastructure
 {
     public static class InfraestructureRegistration
     {
-        public static void AddInfraestructure(this IServiceCollection services)    
+        public static void AddInfraestructure(this IServiceCollection services)
         {
             services.AddScoped<RecruiterDbContext>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IEmailIntegration, SmtpEmailIntegration>();
+        }
 
-            // servicio de envio de correos.
-            services.AddTransient<IEmailService, EmailService>();
-
-            // Servicio de usuario
-            services.AddTransient<INexoUserManager, NexoUserManager>();
-
-            // Servicio de autenticación
-            services.AddScoped<INexoAuthStateProvider, NexoAuthStateProvider>();
+        public static void AddDomainRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
     }
 }

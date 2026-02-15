@@ -1,0 +1,65 @@
+@page "/auth/account"
+@using Microsoft.AspNetCore.Identity
+@using NexoRecruiter.Application.DTOs.Account
+@using NexoRecruiter.Application.DTOs.Auth
+@using NexoRecruiter.Application.Services.Auth
+@using NexoRecruiter.Domain.Repositories.Auth
+@using NexoRecruiter.Domain.Repositories.Auth.ValueObjects
+@using NexoRecruiter.Web.Features.Auth.Models
+@using NexoRecruiter.Web.Features.Dashboard.Layouts
+@using NexoRecruiter.Web.Features.Dashboard.Layouts.DashboardLayout
+
+@attribute [Authorize]
+@layout DashboardLayout
+@inject IUserService _nexoUserManager
+@inject ISnackbar Snackbar
+@inject NavigationManager navigationManager
+
+<MudContainer Class="nexo-account-page">
+    <MudText Class="nexo-account-page__text-title" Typo="Typo.h5" Align="Align.Start" Color="Color.Secondary">
+        Account Settings
+    </MudText>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard Class="pa-4 gap-4">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">FullName</MudText>
+                        <MudTextField T="string" Disabled="@isNotEditable" Placeholder="Nombre completo"
+                                      Variant="Variant.Filled" @bind-Value="UserAccountDTO.FullName" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Job Title</MudText>
+                        <MudTextField T="string" Disabled="@isNotEditable" Placeholder="Puesto" Variant="Variant.Filled"
+                                      @bind-Value="UserAccountDTO.JobTitle" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.body1" Class="mb-2 mt-4">Created at</MudText>
+                        <MudTextField T="string" Value="@CreatedAtText" Variant="Variant.Filled" Disabled="true" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.body1" Class="mt-4">Last Login</MudText>
+                        <MudTextField T="string" Value="@LastLoginText" Variant="Variant.Filled" Disabled="true" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Spacing="8" Justify="Justify.FlexStart" Class="mt-4">
+                    <MudItem xs="12" lg="8">
+                        <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center" Wrap="Wrap.Wrap">
+                            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ToggleEdit"
+                                       EndIcon="@Icons.Material.Filled.Edit">
+                                Edit
+                            </MudButton>
+                            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="SaveChanges"
+                                       Disabled="@isNotEditable" EndIcon="@Icons.Material.Filled.Save">
+                                Save
+                            </MudButton>
+                            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="GoToChangePassword">
+                                Change Password
+                            </MudButton>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

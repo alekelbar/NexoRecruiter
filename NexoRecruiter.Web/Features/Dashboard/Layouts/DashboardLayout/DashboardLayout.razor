@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Components
+@using NexoRecruiter.Web.Features.Dashboard.Components.NexoAppbar
+@using NexoRecruiter.Web.Features.Dashboard.Components.NexoDrawer
+@using NexoRecruiter.Web.Features.Dashboard.Helpers
+@using NexoRecruiter.Web.Features.Shared.Components.AppShell
+@using System.Reflection.Metadata
+
+@inherits LayoutComponentBase
+
+<CascadingValue Value="this" IsFixed Name="DashboardLayout">
+    <HeadContent>
+        @PageHead
+    </HeadContent>
+    <AppShell>
+        <MudLayout Class="dashboard">
+            <CascadingValue Value="DrawerController">
+                <NexoAppbar drawerController="DrawerController" />
+                <NexoDrawer IsOpen="DrawerController.IsOpen" Toggle="DrawerController.Toggle" />
+                <MudMainContent>
+                    <MudStack Row>
+                        <MudBreadcrumbs Items="_breadcrumbItems" />
+                    </MudStack>
+                    @Body
+                </MudMainContent>
+            </CascadingValue>
+        </MudLayout>
+    </AppShell>
+</CascadingValue>

@@ -1,0 +1,18 @@
+@page "/"
+@using NexoRecruiter.Domain.Repositories.Auth
+@using NexoRecruiter.Web.Features.Shared.Layouts.MainLayout
+@inject NavigationManager _navigationManager
+@layout MainLayout
+
+<MudContainer>
+    <MudText Typo="Typo.h1" Align="Align.Center" Class="mt-5">Welcome to NexoRecruiter!</MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mb-5">Your gateway to seamless recruitment.</MudText>
+
+    <MudDivider></MudDivider>
+    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-5">Discover the Power of NexoRecruiter</MudText>
+    <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-5">
+        NexoRecruiter is designed to streamline your hiring process, making it easier than ever to find the perfect
+        candidates. With our intuitive interface and powerful features, you can manage job postings, track applications,
+        and communicate with candidates all in one place.
+    </MudText>
+</MudContainer>
